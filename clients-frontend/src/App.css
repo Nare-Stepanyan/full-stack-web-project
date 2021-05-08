@@ -1,0 +1,30 @@
+.wrapper {
+  max-width: 1440px;
+  margin: 60px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.table-wrapper {
+  width: 100%;
+}
+.table-wrapper table {
+  width: 100%;
+  border-collapse: collapse;
+}
+table tr,
+th,
+td {
+  padding: 5px;
+}
+.client-list {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f8f9fa;
+  border-radius: 5px;
+  padding: 15px;
+}
+.client-list h3 {
+  color: #17a2b8;
+}

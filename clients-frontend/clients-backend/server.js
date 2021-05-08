@@ -21,7 +21,7 @@ db.once("open", function () {
 
 app.use(express.json());
 app.use(cors());
-app.use("/app", routesUrls);
+app.use("/api", routesUrls);
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
 });
