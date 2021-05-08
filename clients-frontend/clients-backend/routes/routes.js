@@ -4,7 +4,7 @@ const providerTemplate = require("./../models/providers.schema");
 
 const router = express.Router();
 
-router.post("/clients", (req, res) => {
+router.post("/client", (req, res) => {
   const client = new clientTemplate({
     name: req.body.name,
     email: req.body.email,
@@ -19,7 +19,7 @@ router.post("/clients", (req, res) => {
     .catch((err) => res.json(err));
 });
 
-router.post("/providers", (req, res) => {
+router.post("/provider", (req, res) => {
   const provider = new providerTemplate({
     name: req.body.name,
   });
