@@ -28,3 +28,16 @@ td {
 .client-list h3 {
   color: #17a2b8;
 }
+.providerList {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.edit-client-btns {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.cancel-btn {
+  margin-right: 10px;
+}
