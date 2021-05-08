@@ -1,0 +1,9 @@
+POST http://localhost:3001/app/clients
+Content-Type: application/json
+
+{
+    "name": "Janette",
+    "email": "hello@com",
+    "phone": "094526421",
+    "providers": ["arr", "arr2", "arr3"]
+}
