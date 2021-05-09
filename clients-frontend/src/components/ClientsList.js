@@ -16,6 +16,23 @@ class ClientsList extends PureComponent {
     editClient: null,
   };
 
+  componentDidMount() {
+    const url = "http://localhost:3001/provider";
+    fetch(url)
+      .then((res) => res.json())
+      .then((response) => {
+        if (response.error) {
+          throw response.error;
+        }
+        this.setState({
+          providers: [...response],
+        });
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
+
   toggleAddNewClientModal = () => {
     this.setState({
       newClientModal: !this.state.newClientModal,
