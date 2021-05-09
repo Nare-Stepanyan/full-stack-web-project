@@ -1,16 +1,40 @@
 const express = require("express");
 const providerController = require("./../controllers/provider.controller");
 const clientController = require("./../controllers/client.controller");
-
 const router = express.Router();
 
-// create a new client
 router.post("/client", clientController.create);
 
-// create a new provider
+/**
+ * @swagger
+ * /provider:
+ *     post:
+ *      summary: Creates a new provider.
+ *      consumes:
+ *      - application/json
+ *      parameters:
+ *      - in: body
+ *      name: provider
+ *      description: New providers name.
+ *      schema:
+ *        type: string
+ *      responses:
+ *       201:
+ *        description: Created
+ */
+
 router.post("/provider", providerController.create);
 
-// get all providers list
+/**
+ * @swagger
+ * /provider:
+ *      get:
+ *          description: Get all providers
+ *          responses:
+ *              200:
+ *                  description: Success
+ *
+ */
 router.get("/provider", providerController.get);
 
 module.exports = router;
