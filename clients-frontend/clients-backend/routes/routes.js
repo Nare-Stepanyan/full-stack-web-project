@@ -1,40 +1,16 @@
 const express = require("express");
-const clientTemplate = require("./../models/clients.schema");
-const providerTemplate = require("./../models/providers.schema");
+const providerController = require("./../controllers/provider.controller");
+const clientController = require("./../controllers/client.controller");
 
 const router = express.Router();
 
-router.post("/client", (req, res) => {
-  const client = new clientTemplate({
-    name: req.body.name,
-    email: req.body.email,
-    phone: req.body.phone,
-    providers: req.body.providers,
-  });
-  client
-    .save()
-    .then((data) => {
-      res.json(data);
-    })
-    .catch((err) => res.json(err));
-});
+// create a new client
+router.post("/client", clientController.create);
 
-router.post("/provider", (req, res) => {
-  const provider = new providerTemplate({
-    name: req.body.name,
-  });
-  provider
-    .save()
-    .then((data) => {
-      res.json(data);
-    })
-    .catch((err) => {
-      res.json(err);
-    });
-});
+// create a new provider
+router.post("/provider", providerController.create);
 
-router.get("./clientList", (req, res) => {
-  console.log(`Get client list`);
-});
+// get all providers list
+router.get("/provider", providerController.get);
 
 module.exports = router;

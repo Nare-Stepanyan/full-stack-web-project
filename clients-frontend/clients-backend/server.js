@@ -21,7 +21,12 @@ db.once("open", function () {
 
 app.use(express.json());
 app.use(cors());
-app.use("/api", routesUrls);
+app.use("/", routesUrls);
+
+app.use("/", (req, res, next) => {
+  res.end("Home page");
+});
+
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
 });
