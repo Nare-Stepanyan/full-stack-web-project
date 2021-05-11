@@ -1,12 +1,14 @@
 import React, { PureComponent } from "react";
 import { Button, Modal, Form, Row, Col } from "react-bootstrap";
 import ProviderList from "./ProviderList";
+import PropTypes from "prop-types";
 
 class EditClient extends PureComponent {
   render() {
+    const { onClose } = this.props;
     return (
       <Modal show={true} centered>
-        <Modal.Header closeButton>
+        <Modal.Header>
           <Modal.Title style={{ color: "#17a2b8" }}>Edit Client</Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -61,7 +63,7 @@ class EditClient extends PureComponent {
             <Button variant="danger">Delete Client</Button>
           </div>
           <div>
-            <Button className="cancel-btn" variant="light">
+            <Button className="cancel-btn" variant="light" onClick={onClose}>
               Cancel
             </Button>
             <Button variant="info">Add Client</Button>
@@ -71,5 +73,10 @@ class EditClient extends PureComponent {
     );
   }
 }
+
+EditClient.propTypes = {
+  providers: PropTypes.array.isRequired,
+  onClose: PropTypes.func.isRequired,
+};
 
 export default EditClient;

@@ -2,6 +2,7 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { Form, Col, Button } from "react-bootstrap";
+import PropTypes from "prop-types";
 
 function SingleProvider({ provider }) {
   return (
@@ -22,5 +23,9 @@ function SingleProvider({ provider }) {
     </div>
   );
 }
+
+SingleProvider.propTypes = {
+  provider: PropTypes.string.isRequired,
+};
 
 export default SingleProvider;

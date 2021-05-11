@@ -8,10 +8,10 @@ class ProviderController {
       };
       await providers.countDocuments(
         { name: providerData.name },
-        (err, count) => {
+        async (err, count) => {
           if (count === 0) {
-            const newProvider = providers.create(providerData);
-            res.json(newProvider);
+            const newProvider = await providers.create(providerData);
+            res.send(newProvider);
           } else {
             err = { message: "Such provider already exists" };
             res.json(err.message);
