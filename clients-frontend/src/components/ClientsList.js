@@ -69,6 +69,29 @@ class ClientsList extends PureComponent {
         .catch((error) => {});
     }
   };
+  editProvider = (id) => {};
+  deleteProvider = (id) => {
+    const url = `http://localhost:3001/provider/${id}`;
+    fetch(url, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        if (response.error) {
+          throw response.error;
+        }
+        const newProviders = this.state.providers.filter(
+          (provider) => provider._id !== id
+        );
+        this.setState({
+          providers: newProviders,
+        });
+      })
+      .catch((error) => {});
+  };
 
   render() {
     const { clients } = this.state;
@@ -102,6 +125,7 @@ class ClientsList extends PureComponent {
             providers={this.state.providers}
             onClose={this.toggleAddNewClientModal}
             addNewProvider={this.addProvider}
+            deleteProvider={this.deleteProvider}
           />
         )}
         {this.state.editClientModal && (

@@ -36,6 +36,19 @@ class ProviderController {
       next(err);
     }
   };
+
+  delete = async (req, res, next) => {
+    try {
+      const provider = await providers.findOneAndDelete({
+        _id: req.params.id,
+      });
+
+      if (!provider) throw error;
+      res.json({ success: true });
+    } catch (err) {
+      next(err);
+    }
+  };
 }
 
 module.exports = new ProviderController();

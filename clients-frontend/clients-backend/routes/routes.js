@@ -37,4 +37,6 @@ router.post("/provider", providerController.create);
  */
 router.get("/provider", providerController.get);
 
+router.delete("/provider/:id", providerController.delete);
+
 module.exports = router;
