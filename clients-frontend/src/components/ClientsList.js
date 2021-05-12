@@ -11,6 +11,7 @@ class ClientsList extends PureComponent {
     phone: "",
     clients: [],
     providers: [],
+    selectedProviders: new Set(),
     newClientModal: false,
     editClientModal: false,
     editClient: null,
@@ -43,6 +44,52 @@ class ClientsList extends PureComponent {
     });
   };
 
+  handleChange = (event) => {
+    const { name, value } = event.target;
+    this.setState({
+      [name]: value,
+    });
+  };
+  handleClick = () => {
+    const { name, email, phone, selectedProviders } = this.state;
+    if (!name || !email || !phone) {
+      return;
+    }
+    const client = {
+      name,
+      email,
+      phone,
+      selectedProviders,
+    };
+    const url = "http://localhost:3001/client";
+
+    const body = JSON.stringify(client);
+
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: body,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        if (response.error) {
+          throw response.error;
+        }
+        const newClient = response;
+        this.setState({
+          clients: [newClient, ...this.state.clients],
+          newClientModal: false,
+          name: "",
+          email: "",
+          phone: "",
+          selectedProviders: new Set(),
+        });
+      })
+      .catch((error) => {});
+  };
+
   addProvider = (name) => {
     const { providers } = this.state;
     const found = providers.some((el) => el.name === name);
@@ -71,7 +118,6 @@ class ClientsList extends PureComponent {
   };
 
   saveEditedProvider = (editedProvider) => {
-    console.log(editedProvider);
     const url = `http://localhost:3001/provider/${editedProvider._id}`;
     const body = JSON.stringify(editedProvider);
     fetch(url, {
@@ -156,6 +202,8 @@ class ClientsList extends PureComponent {
             addNewProvider={this.addProvider}
             deleteProvider={this.deleteProvider}
             saveEditedProvider={this.saveEditedProvider}
+            handleNewClientInfo={this.handleClick}
+            handleChangeNewClientInfo={this.handleChange}
           />
         )}
         {this.state.editClientModal && (

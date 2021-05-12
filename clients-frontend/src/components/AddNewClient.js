@@ -19,9 +19,16 @@ class AddNewClient extends PureComponent {
       providerInput: input,
     });
   };
+
   render() {
-    const { onClose, providers, deleteProvider, saveEditedProvider } =
-      this.props;
+    const {
+      onClose,
+      providers,
+      deleteProvider,
+      saveEditedProvider,
+      handleNewClientInfo,
+      handleChangeNewClientInfo,
+    } = this.props;
     const { providerInput } = this.state;
     return (
       <Modal show={true} centered>
@@ -35,7 +42,11 @@ class AddNewClient extends PureComponent {
                 Name:
               </Form.Label>
               <Col sm={10}>
-                <Form.Control type="name" />
+                <Form.Control
+                  type="name"
+                  name="name"
+                  onChange={handleChangeNewClientInfo}
+                />
               </Col>
             </Form.Group>
             <Form.Group as={Row} controlId="formHorizontalEmail">
@@ -43,7 +54,11 @@ class AddNewClient extends PureComponent {
                 Email:
               </Form.Label>
               <Col sm={10}>
-                <Form.Control type="email" />
+                <Form.Control
+                  type="email"
+                  name="email"
+                  onChange={handleChangeNewClientInfo}
+                />
               </Col>
             </Form.Group>
             <Form.Group as={Row} controlId="formHorizontalPhone">
@@ -51,7 +66,11 @@ class AddNewClient extends PureComponent {
                 Phone:
               </Form.Label>
               <Col sm={10}>
-                <Form.Control type="phone" />
+                <Form.Control
+                  type="phone"
+                  name="phone"
+                  onChange={handleChangeNewClientInfo}
+                />
               </Col>
             </Form.Group>
             <Form.Group as={Row} controlId="formHorizontalProviders">
@@ -89,7 +108,9 @@ class AddNewClient extends PureComponent {
           <Button variant="light" onClick={onClose}>
             Cancel
           </Button>
-          <Button variant="info">Add Client</Button>
+          <Button variant="info" onClick={handleNewClientInfo}>
+            Add Client
+          </Button>
         </Modal.Footer>
       </Modal>
     );
@@ -102,6 +123,8 @@ AddNewClient.propTypes = {
   addNewProvider: PropTypes.func.isRequired,
   deleteProvider: PropTypes.func.isRequired,
   saveEditedProvider: PropTypes.func.isRequired,
+  handleNewClientInfo: PropTypes.func.isRequired,
+  handleChangeNewClientInfo: PropTypes.func.isRequired,
 };
 
 export default AddNewClient;
