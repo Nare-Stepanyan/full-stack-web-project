@@ -1,5 +1,6 @@
 import React from "react";
 import { Button } from "react-bootstrap";
+import PropTypes from "prop-types";
 
 function SingleClient({ id, newClient }) {
   return (
@@ -14,5 +15,10 @@ function SingleClient({ id, newClient }) {
     </tr>
   );
 }
+
+SingleClient.propTypes = {
+  key: PropTypes.string.isRequired,
+  newClient: PropTypes.object.isRequired,
+};
 
 export default SingleClient;

@@ -8,10 +8,10 @@ class ProviderController {
       };
       await providers.countDocuments(
         { name: providerData.name },
-        (err, count) => {
+        async (err, count) => {
           if (count === 0) {
-            const newProvider = providers.create(providerData);
-            res.json(newProvider);
+            const newProvider = await providers.create(providerData);
+            res.send(newProvider);
           } else {
             err = { message: "Such provider already exists" };
             res.json(err.message);
@@ -32,6 +32,33 @@ class ProviderController {
           res.send(result);
         }
       });
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  delete = async (req, res, next) => {
+    try {
+      const provider = await providers.findOneAndDelete({
+        _id: req.params.id,
+      });
+
+      if (!provider) throw error;
+      res.json({ success: true });
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  update = async (req, res, next) => {
+    try {
+      const provider = await providers.findOne({
+        _id: req.params.id,
+      });
+      if (!provider) throw error;
+      req.body.name && (provider.name = req.body.name);
+      await provider.save();
+      res.json(provider.toObject());
     } catch (err) {
       next(err);
     }
