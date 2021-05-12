@@ -105,7 +105,6 @@ class ClientsList extends PureComponent {
         if (response.error) {
           throw response.error;
         }
-        console.log(response);
         const newClient = response;
         this.setState({
           clients: [newClient, ...this.state.clients],
