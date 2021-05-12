@@ -23,14 +23,14 @@ class SingleProvider extends PureComponent {
   };
 
   render() {
-    const { provider, deleteProvider } = this.props;
+    const { provider, deleteProvider, saveEditedProvider } = this.props;
     const { showConfirm, showEdit } = this.state;
     return (
       <div className="providerList">
         <Col sm={6}>
           <Form.Check type="checkbox" label={provider.name} />
         </Col>
-        <Col sm={1}>
+        <Col sm={2}>
           <Button variant="custom" onClick={this.openEditModal}>
             <FontAwesomeIcon icon={faEdit} style={{ color: "#17a2b8" }} />
           </Button>
@@ -40,17 +40,18 @@ class SingleProvider extends PureComponent {
             <FontAwesomeIcon icon={faTrash} style={{ color: "#d11a2a" }} />
           </Button>
         </Col>
+        {showEdit && (
+          <EditProviderModal
+            handleClose={this.openEditModal}
+            provider={provider}
+            saveEditedProvider={saveEditedProvider}
+          />
+        )}
         {showConfirm && (
           <ConfirmProviderModal
             handleClose={this.openConfirmModal}
             deleteProvider={deleteProvider}
             id={provider._id}
-          />
-        )}
-        {showEdit && (
-          <EditProviderModal
-            handleClose={this.openEditModal}
-            provider={provider}
           />
         )}
       </div>
@@ -61,6 +62,7 @@ class SingleProvider extends PureComponent {
 SingleProvider.propTypes = {
   provider: PropTypes.object.isRequired,
   deleteProvider: PropTypes.func.isRequired,
+  saveEditedProvider: PropTypes.func.isRequired,
 };
 
 export default SingleProvider;

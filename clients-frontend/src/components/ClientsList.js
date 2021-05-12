@@ -69,7 +69,36 @@ class ClientsList extends PureComponent {
         .catch((error) => {});
     }
   };
-  editProvider = (id) => {};
+
+  saveEditedProvider = (editedProvider) => {
+    console.log(editedProvider);
+    const url = `http://localhost:3001/provider/${editedProvider._id}`;
+    const body = JSON.stringify(editedProvider);
+    fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        if (response.error) {
+          throw response.error;
+        } else {
+          const newProviders = [...this.state.providers];
+          const editedProviderIndex = this.state.providers.findIndex(
+            (provider, i) => provider._id === editedProvider._id
+          );
+          newProviders[editedProviderIndex] = response;
+          this.setState({
+            providers: newProviders,
+          });
+        }
+      })
+      .catch((error) => {});
+  };
+
   deleteProvider = (id) => {
     const url = `http://localhost:3001/provider/${id}`;
     fetch(url, {
@@ -126,6 +155,7 @@ class ClientsList extends PureComponent {
             onClose={this.toggleAddNewClientModal}
             addNewProvider={this.addProvider}
             deleteProvider={this.deleteProvider}
+            saveEditedProvider={this.saveEditedProvider}
           />
         )}
         {this.state.editClientModal && (

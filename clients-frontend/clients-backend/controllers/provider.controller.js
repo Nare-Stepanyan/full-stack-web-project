@@ -49,6 +49,20 @@ class ProviderController {
       next(err);
     }
   };
+
+  update = async (req, res, next) => {
+    try {
+      const provider = await providers.findOne({
+        _id: req.params.id,
+      });
+      if (!provider) throw error;
+      req.body.name && (provider.name = req.body.name);
+      await provider.save();
+      res.json(provider.toObject());
+    } catch (err) {
+      next(err);
+    }
+  };
 }
 
 module.exports = new ProviderController();

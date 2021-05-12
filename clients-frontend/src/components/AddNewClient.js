@@ -20,7 +20,8 @@ class AddNewClient extends PureComponent {
     });
   };
   render() {
-    const { onClose, providers, deleteProvider } = this.props;
+    const { onClose, providers, deleteProvider, saveEditedProvider } =
+      this.props;
     const { providerInput } = this.state;
     return (
       <Modal show={true} centered>
@@ -77,6 +78,7 @@ class AddNewClient extends PureComponent {
                   <ProviderList
                     providers={providers}
                     deleteProvider={deleteProvider}
+                    saveEditedProvider={saveEditedProvider}
                   />
                 </Col>
               </Form.Group>
@@ -99,6 +101,7 @@ AddNewClient.propTypes = {
   onClose: PropTypes.func.isRequired,
   addNewProvider: PropTypes.func.isRequired,
   deleteProvider: PropTypes.func.isRequired,
+  saveEditedProvider: PropTypes.func.isRequired,
 };
 
 export default AddNewClient;
