@@ -32,6 +32,21 @@ class ClientsList extends PureComponent {
       .catch((error) => {
         console.error("Error:", error);
       });
+
+    const urlClients = "http://localhost:3001/client";
+    fetch(urlClients)
+      .then((res) => res.json())
+      .then((response) => {
+        if (response.error) {
+          throw response.error;
+        }
+        this.setState({
+          clients: response,
+        });
+      })
+      .catch((error) => {
+        console.log("Error:");
+      });
   }
   toggleAddNewClientModal = () => {
     this.setState({
@@ -50,16 +65,29 @@ class ClientsList extends PureComponent {
       [name]: value,
     });
   };
+  handleCheck = (id) => {
+    const selectedProviders = new Set(this.state.selectedProviders);
+    if (selectedProviders.has(id)) {
+      selectedProviders.delete(id);
+    } else {
+      selectedProviders.add(id);
+    }
+    this.setState({
+      selectedProviders,
+    });
+  };
   handleClick = () => {
     const { name, email, phone, selectedProviders } = this.state;
+    let providers = [...selectedProviders];
     if (!name || !email || !phone) {
       return;
     }
+
     const client = {
       name,
       email,
       phone,
-      selectedProviders,
+      providers,
     };
     const url = "http://localhost:3001/client";
 
@@ -77,6 +105,7 @@ class ClientsList extends PureComponent {
         if (response.error) {
           throw response.error;
         }
+        console.log(response);
         const newClient = response;
         this.setState({
           clients: [newClient, ...this.state.clients],
@@ -170,8 +199,8 @@ class ClientsList extends PureComponent {
 
   render() {
     const { clients } = this.state;
-    const clientList = clients.map((el, i) => {
-      return <SingleClient key={i} newClient={el} />;
+    const clientList = clients.map((el) => {
+      return <SingleClient key={el._id} id={el._id} newClient={el} />;
     });
     return (
       <>
@@ -204,6 +233,7 @@ class ClientsList extends PureComponent {
             saveEditedProvider={this.saveEditedProvider}
             handleNewClientInfo={this.handleClick}
             handleChangeNewClientInfo={this.handleChange}
+            onCheck={this.handleCheck}
           />
         )}
         {this.state.editClientModal && (

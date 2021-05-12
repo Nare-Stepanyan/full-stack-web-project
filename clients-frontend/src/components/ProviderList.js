@@ -2,7 +2,12 @@ import React from "react";
 import SingleProvider from "./SingleProvider";
 import PropTypes from "prop-types";
 
-function ProviderList({ providers, deleteProvider, saveEditedProvider }) {
+function ProviderList({
+  providers,
+  deleteProvider,
+  saveEditedProvider,
+  onCheck,
+}) {
   const providersList = providers.map((el) => {
     return (
       <SingleProvider
@@ -10,6 +15,7 @@ function ProviderList({ providers, deleteProvider, saveEditedProvider }) {
         provider={el}
         deleteProvider={deleteProvider}
         saveEditedProvider={saveEditedProvider}
+        onCheck={onCheck}
       />
     );
   });
@@ -20,6 +26,7 @@ ProviderList.propTypes = {
   providers: PropTypes.array.isRequired,
   deleteProvider: PropTypes.func.isRequired,
   saveEditedProvider: PropTypes.func.isRequired,
+  onCheck: PropTypes.func.isRequired,
 };
 
 export default ProviderList;

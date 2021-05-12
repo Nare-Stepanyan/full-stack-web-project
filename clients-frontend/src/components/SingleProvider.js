@@ -10,6 +10,7 @@ class SingleProvider extends PureComponent {
   state = {
     showConfirm: false,
     showEdit: false,
+    checked: false,
   };
   openConfirmModal = () => {
     this.setState({
@@ -21,14 +22,24 @@ class SingleProvider extends PureComponent {
       showEdit: !this.state.showEdit,
     });
   };
-
+  handleCheck = () => {
+    const { onCheck, provider } = this.props;
+    this.setState({
+      checked: !this.state.checked,
+    });
+    onCheck(provider._id);
+  };
   render() {
     const { provider, deleteProvider, saveEditedProvider } = this.props;
     const { showConfirm, showEdit } = this.state;
     return (
       <div className="providerList">
         <Col sm={6}>
-          <Form.Check type="checkbox" label={provider.name} />
+          <Form.Check
+            type="checkbox"
+            label={provider.name}
+            onClick={this.handleCheck}
+          />
         </Col>
         <Col sm={2}>
           <Button variant="custom" onClick={this.openEditModal}>
@@ -63,6 +74,7 @@ SingleProvider.propTypes = {
   provider: PropTypes.object.isRequired,
   deleteProvider: PropTypes.func.isRequired,
   saveEditedProvider: PropTypes.func.isRequired,
+  onCheck: PropTypes.func.isRequired,
 };
 
 export default SingleProvider;

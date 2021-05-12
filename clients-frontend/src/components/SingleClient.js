@@ -2,9 +2,9 @@ import React from "react";
 import { Button } from "react-bootstrap";
 import PropTypes from "prop-types";
 
-function SingleClient({ id, newClient }) {
+function SingleClient({ newClient }) {
   return (
-    <tr key={id}>
+    <tr>
       <td>{newClient.name}</td>
       <td>{newClient.email}</td>
       <td>{newClient.phone}</td>
@@ -17,7 +17,6 @@ function SingleClient({ id, newClient }) {
 }
 
 SingleClient.propTypes = {
-  key: PropTypes.string.isRequired,
   newClient: PropTypes.object.isRequired,
 };
 

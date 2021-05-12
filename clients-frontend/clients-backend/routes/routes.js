@@ -5,6 +5,8 @@ const router = express.Router();
 
 router.post("/client", clientController.create);
 
+router.get("/client", clientController.get);
+
 /**
  * @swagger
  * /provider:

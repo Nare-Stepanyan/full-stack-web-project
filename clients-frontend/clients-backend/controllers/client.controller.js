@@ -11,16 +11,30 @@ class ClientController {
       };
       await clients.countDocuments(
         { email: clientData.email },
-        (err, count) => {
+        async (err, count) => {
           if (count === 0) {
-            const newClientData = clients.create(clientData);
-            res.json(newClientData);
+            const newClientData = await clients.create(clientData);
+            res.send(newClientData);
           } else {
             err = { message: "Client with this email already exists" };
             res.json(err.message);
           }
         }
       );
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  get = async (req, res, next) => {
+    try {
+      await clients.find({}, function (err, result) {
+        if (err) {
+          res.send(err);
+        } else {
+          res.send(result);
+        }
+      });
     } catch (err) {
       next(err);
     }
