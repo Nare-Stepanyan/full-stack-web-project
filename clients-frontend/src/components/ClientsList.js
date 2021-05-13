@@ -53,9 +53,9 @@ class ClientsList extends PureComponent {
       newClientModal: !this.state.newClientModal,
     });
   };
-  toggleEditClientModal = () => {
+  toggleEditClientModal = (client) => {
     this.setState({
-      editClientModal: !this.state.editClientModal,
+      editClient: client,
     });
   };
 
@@ -199,7 +199,14 @@ class ClientsList extends PureComponent {
   render() {
     const { clients } = this.state;
     const clientList = clients.map((el) => {
-      return <SingleClient key={el._id} id={el._id} newClient={el} />;
+      return (
+        <SingleClient
+          key={el._id}
+          id={el._id}
+          newClient={el}
+          showEditModal={this.toggleEditClientModal}
+        />
+      );
     });
     return (
       <>
@@ -235,10 +242,11 @@ class ClientsList extends PureComponent {
             onCheck={this.handleCheck}
           />
         )}
-        {this.state.editClientModal && (
+        {!!this.state.editClient && (
           <EditClient
+            client={this.state.editClient}
             providers={this.state.providers}
-            onClose={this.toggleAddNewClientModal}
+            onClose={() => this.toggleEditClientModal(null)}
           />
         )}
       </>

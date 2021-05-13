@@ -23,10 +23,10 @@ function ProviderList({
 }
 
 ProviderList.propTypes = {
-  providers: PropTypes.array.isRequired,
-  deleteProvider: PropTypes.func.isRequired,
-  saveEditedProvider: PropTypes.func.isRequired,
-  onCheck: PropTypes.func.isRequired,
+  // providers: PropTypes.array.isRequired,
+  // deleteProvider: PropTypes.func.isRequired,
+  // saveEditedProvider: PropTypes.func.isRequired,
+  // onCheck: PropTypes.func.isRequired,
 };
 
 export default ProviderList;
