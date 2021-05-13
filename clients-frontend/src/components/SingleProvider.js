@@ -29,8 +29,15 @@ class SingleProvider extends PureComponent {
     });
     onCheck(provider._id);
   };
+
   render() {
-    const { provider, deleteProvider, saveEditedProvider } = this.props;
+    const {
+      provider,
+      deleteProvider,
+      saveEditedProvider,
+      singleClientProviders,
+    } = this.props;
+
     const { showConfirm, showEdit } = this.state;
     return (
       <div className="providerList">
@@ -39,6 +46,10 @@ class SingleProvider extends PureComponent {
             type="checkbox"
             label={provider.name}
             onClick={this.handleCheck}
+            defaultChecked={
+              singleClientProviders &&
+              singleClientProviders.includes(provider._id)
+            }
           />
         </Col>
         <Col sm={2}>
@@ -74,7 +85,8 @@ SingleProvider.propTypes = {
   provider: PropTypes.object.isRequired,
   deleteProvider: PropTypes.func.isRequired,
   saveEditedProvider: PropTypes.func.isRequired,
-  onCheck: PropTypes.func.isRequired,
+  onCheck: PropTypes.func,
+  singleClientProviders: PropTypes.array,
 };
 
 export default SingleProvider;

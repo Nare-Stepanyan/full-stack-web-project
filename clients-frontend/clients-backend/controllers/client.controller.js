@@ -39,6 +39,36 @@ class ClientController {
       next(err);
     }
   };
+
+  update = async (req, res, next) => {
+    try {
+      const client = await clients.findOne({
+        _id: req.params.id,
+      });
+      if (!client) throw error;
+      req.body.name && (client.name = req.body.name);
+      req.body.email && (client.email = req.body.email);
+      req.body.phone && (client.phone = req.body.phone);
+      req.body.providers && (client.providers = req.body.providers);
+      await client.save();
+      res.json(client.toObject());
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  delete = async (req, res, next) => {
+    try {
+      const client = await clients.findOneAndDelete({
+        _id: req.params.id,
+      });
+
+      if (!client) throw error;
+      res.json({ success: true });
+    } catch (err) {
+      next(err);
+    }
+  };
 }
 
 module.exports = new ClientController();

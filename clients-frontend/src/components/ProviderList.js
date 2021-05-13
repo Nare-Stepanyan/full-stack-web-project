@@ -7,6 +7,7 @@ function ProviderList({
   deleteProvider,
   saveEditedProvider,
   onCheck,
+  singleClientProviders,
 }) {
   const providersList = providers.map((el) => {
     return (
@@ -16,6 +17,7 @@ function ProviderList({
         deleteProvider={deleteProvider}
         saveEditedProvider={saveEditedProvider}
         onCheck={onCheck}
+        singleClientProviders={singleClientProviders}
       />
     );
   });
@@ -26,7 +28,8 @@ ProviderList.propTypes = {
   providers: PropTypes.array.isRequired,
   deleteProvider: PropTypes.func.isRequired,
   saveEditedProvider: PropTypes.func.isRequired,
-  onCheck: PropTypes.func.isRequired,
+  onCheck: PropTypes.func,
+  singleClientProviders: PropTypes.array,
 };
 
 export default ProviderList;

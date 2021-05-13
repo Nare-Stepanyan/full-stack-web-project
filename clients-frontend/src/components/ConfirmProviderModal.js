@@ -4,9 +4,9 @@ import PropTypes from "prop-types";
 function ConfirmProviderModal({ handleClose, deleteProvider, id }) {
   return (
     <>
-      <Modal show={true} onHide={handleClose}>
+      <Modal size="sm" centered show={true} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Are you sure to remove this provider?</Modal.Title>
+          <Modal.Title>Are you sure to remove?</Modal.Title>
         </Modal.Header>
         <Modal.Footer>
           <Button variant="danger" onClick={() => deleteProvider(id)}>
