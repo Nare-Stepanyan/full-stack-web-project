@@ -14,7 +14,7 @@ class ProviderController {
             res.send(newProvider);
           } else {
             err = { message: "Such provider already exists" };
-            res.json(err.message);
+            res.send(err.message);
           }
         }
       );
