@@ -8,6 +8,13 @@ class EditClient extends PureComponent {
   state = {
     ...this.props.client,
     showDeleteModal: false,
+    providerInput: "",
+  };
+  handleNewProvider = () => {
+    this.props.addNewProvider(this.state.providerInput);
+    this.setState({
+      providerInput: "",
+    });
   };
   handleChange = (event) => {
     const { name, value } = event.target;
@@ -25,8 +32,10 @@ class EditClient extends PureComponent {
     this.props.onClose(null);
   };
   render() {
-    const { onClose, providers } = this.props;
-    const { name, email, phone, showDeleteModal } = this.state;
+    const { onClose, providers, deleteProvider, saveEditedProvider, onCheck } =
+      this.props;
+    const { name, email, phone, providerInput, showDeleteModal } = this.state;
+
     return (
       <>
         <Modal show={true} centered>
@@ -79,17 +88,30 @@ class EditClient extends PureComponent {
                   Providers:
                 </Form.Label>
                 <Col sm={6}>
-                  <Form.Control type="providers" />
+                  <Form.Control
+                    type="providers"
+                    name="providerInput"
+                    value={providerInput}
+                    onChange={this.handleChange}
+                  />
                 </Col>
                 <Col sm={4}>
-                  <Button variant="light">Add Provider</Button>
+                  <Button variant="light" onClick={this.handleNewProvider}>
+                    Add Provider
+                  </Button>
                 </Col>
               </Form.Group>
               <fieldset>
                 <Form.Group as={Row}>
                   <Form.Label column sm={2}></Form.Label>
                   <Col sm={8}>
-                    <ProviderList providers={providers} />
+                    <ProviderList
+                      providers={providers}
+                      deleteProvider={deleteProvider}
+                      saveEditedProvider={saveEditedProvider}
+                      onCheck={onCheck}
+                      singleClientProviders={this.state.providers}
+                    />
                   </Col>
                 </Form.Group>
               </fieldset>
@@ -112,9 +134,6 @@ class EditClient extends PureComponent {
         {showDeleteModal && (
           <DeleteClientModal
             confirmDelete={this.confirmDelete}
-            // deleteClient={deleteClient}
-            // id={this.state._id}
-            // onClose={onClose}
             closeModals={this.closeModals}
           />
         )}
@@ -128,6 +147,9 @@ EditClient.propTypes = {
   providers: PropTypes.array.isRequired,
   onClose: PropTypes.func.isRequired,
   deleteClient: PropTypes.func.isRequired,
+  addNewProvider: PropTypes.func.isRequired,
+  deleteProvider: PropTypes.func.isRequired,
+  saveEditedProvider: PropTypes.func.isRequired,
 };
 
 export default EditClient;

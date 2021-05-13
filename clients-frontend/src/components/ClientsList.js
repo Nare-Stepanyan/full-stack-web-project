@@ -162,7 +162,7 @@ class ClientsList extends PureComponent {
         } else {
           const newProviders = [...this.state.providers];
           const editedProviderIndex = this.state.providers.findIndex(
-            (provider, i) => provider._id === editedProvider._id
+            (provider) => provider._id === editedProvider._id
           );
           newProviders[editedProviderIndex] = response;
           this.setState({
@@ -211,7 +211,6 @@ class ClientsList extends PureComponent {
         const newClientList = this.state.clients.filter(
           (client) => client._id !== id
         );
-        //this.toggleEditClientModal(null);
         this.setState({
           clients: newClientList,
         });
@@ -271,6 +270,10 @@ class ClientsList extends PureComponent {
             providers={this.state.providers}
             onClose={() => this.toggleEditClientModal(null)}
             deleteClient={this.deleteClient}
+            addNewProvider={this.addProvider}
+            deleteProvider={this.deleteProvider}
+            saveEditedProvider={this.saveEditedProvider}
+            onCheck={this.handleCheck}
           />
         )}
       </>

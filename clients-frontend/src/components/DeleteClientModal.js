@@ -5,9 +5,9 @@ import PropTypes from "prop-types";
 function DeleteClientModal({ confirmDelete, closeModals }) {
   return (
     <>
-      <Modal show={true} onHide={confirmDelete}>
+      <Modal size="sm" centered show={true} onHide={confirmDelete}>
         <Modal.Header closeButton>
-          <Modal.Title>Are you sure to delete this client?</Modal.Title>
+          <Modal.Title>Delete this client?</Modal.Title>
         </Modal.Header>
         <Modal.Footer>
           <Button variant="danger" onClick={closeModals}>
