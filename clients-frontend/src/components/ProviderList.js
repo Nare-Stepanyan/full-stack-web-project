@@ -28,7 +28,7 @@ ProviderList.propTypes = {
   providers: PropTypes.array.isRequired,
   deleteProvider: PropTypes.func.isRequired,
   saveEditedProvider: PropTypes.func.isRequired,
-  onCheck: PropTypes.func.isRequired,
+  onCheck: PropTypes.func,
   singleClientProviders: PropTypes.array,
 };
 

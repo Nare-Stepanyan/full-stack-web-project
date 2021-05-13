@@ -7,6 +7,8 @@ router.post("/client", clientController.create);
 
 router.get("/client", clientController.get);
 
+router.put("/client/:id", clientController.update);
+
 router.delete("/client/:id", clientController.delete);
 
 /**

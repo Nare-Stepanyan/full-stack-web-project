@@ -65,6 +65,7 @@ class ClientsList extends PureComponent {
       [name]: value,
     });
   };
+
   handleCheck = (id) => {
     const selectedProviders = new Set(this.state.selectedProviders);
     if (selectedProviders.has(id)) {
@@ -173,6 +174,34 @@ class ClientsList extends PureComponent {
       .catch((error) => {});
   };
 
+  saveEditedClient = (editedClient) => {
+    const url = `http://localhost:3001/client/${editedClient._id}`;
+    const body = JSON.stringify(editedClient);
+    fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body,
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        if (response.error) {
+          throw response.error;
+        } else {
+          const newClients = [...this.state.clients];
+          const editedClientIndex = this.state.clients.findIndex(
+            (client) => client._id === editedClient._id
+          );
+          newClients[editedClientIndex] = response;
+          this.setState({
+            clients: newClients,
+          });
+        }
+      })
+      .catch((error) => {});
+  };
+
   deleteProvider = (id) => {
     const url = `http://localhost:3001/provider/${id}`;
     fetch(url, {
@@ -273,6 +302,7 @@ class ClientsList extends PureComponent {
             addNewProvider={this.addProvider}
             deleteProvider={this.deleteProvider}
             saveEditedProvider={this.saveEditedProvider}
+            saveEditedClient={this.saveEditedClient}
             onCheck={this.handleCheck}
           />
         )}

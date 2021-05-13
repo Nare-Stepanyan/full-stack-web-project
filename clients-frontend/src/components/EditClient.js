@@ -9,7 +9,21 @@ class EditClient extends PureComponent {
     ...this.props.client,
     showDeleteModal: false,
     providerInput: "",
+    selectedProviders: new Set(this.props.client.providers),
   };
+
+  handleCheck = (id) => {
+    const selectedProviders = new Set(this.state.selectedProviders);
+    if (selectedProviders.has(id)) {
+      selectedProviders.delete(id);
+    } else {
+      selectedProviders.add(id);
+    }
+    this.setState({
+      selectedProviders,
+    });
+  };
+
   handleNewProvider = () => {
     this.props.addNewProvider(this.state.providerInput);
     this.setState({
@@ -31,8 +45,23 @@ class EditClient extends PureComponent {
     this.props.deleteClient(this.state._id);
     this.props.onClose(null);
   };
+  saveChanges = () => {
+    const { _id, name, email, phone, selectedProviders } = this.state;
+    if (!name || !email || !phone) {
+      return;
+    }
+    const client = {
+      _id,
+      name,
+      email,
+      phone,
+      providers: [...selectedProviders],
+    };
+    this.props.saveEditedClient(client);
+    this.props.onClose(null);
+  };
   render() {
-    const { onClose, providers, deleteProvider, saveEditedProvider, onCheck } =
+    const { onClose, providers, deleteProvider, saveEditedProvider } =
       this.props;
     const { name, email, phone, providerInput, showDeleteModal } = this.state;
 
@@ -109,7 +138,7 @@ class EditClient extends PureComponent {
                       providers={providers}
                       deleteProvider={deleteProvider}
                       saveEditedProvider={saveEditedProvider}
-                      onCheck={onCheck}
+                      onCheck={this.handleCheck}
                       singleClientProviders={this.state.providers}
                     />
                   </Col>
@@ -127,7 +156,9 @@ class EditClient extends PureComponent {
               <Button className="cancel-btn" variant="light" onClick={onClose}>
                 Cancel
               </Button>
-              <Button variant="info">Save Changes</Button>
+              <Button variant="info" onClick={this.saveChanges}>
+                Save Changes
+              </Button>
             </div>
           </Modal.Footer>
         </Modal>

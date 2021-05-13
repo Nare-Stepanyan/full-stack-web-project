@@ -85,7 +85,7 @@ SingleProvider.propTypes = {
   provider: PropTypes.object.isRequired,
   deleteProvider: PropTypes.func.isRequired,
   saveEditedProvider: PropTypes.func.isRequired,
-  onCheck: PropTypes.func.isRequired,
+  onCheck: PropTypes.func,
   singleClientProviders: PropTypes.array,
 };
 
