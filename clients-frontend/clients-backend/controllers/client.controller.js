@@ -39,6 +39,19 @@ class ClientController {
       next(err);
     }
   };
+
+  delete = async (req, res, next) => {
+    try {
+      const client = await clients.findOneAndDelete({
+        _id: req.params.id,
+      });
+
+      if (!client) throw error;
+      res.json({ success: true });
+    } catch (err) {
+      next(err);
+    }
+  };
 }
 
 module.exports = new ClientController();

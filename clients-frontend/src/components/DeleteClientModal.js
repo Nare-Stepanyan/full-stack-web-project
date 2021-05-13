@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Modal } from "react-bootstrap";
 import PropTypes from "prop-types";
 
-function DeleteClientModal({ confirmDelete }) {
+function DeleteClientModal({ confirmDelete, closeModals }) {
   return (
     <>
       <Modal show={true} onHide={confirmDelete}>
@@ -10,7 +10,7 @@ function DeleteClientModal({ confirmDelete }) {
           <Modal.Title>Are you sure to delete this client?</Modal.Title>
         </Modal.Header>
         <Modal.Footer>
-          <Button variant="danger" onClick={() => console.log("id")}>
+          <Button variant="danger" onClick={closeModals}>
             Delete
           </Button>
           <Button variant="primary" onClick={confirmDelete}>
@@ -24,8 +24,7 @@ function DeleteClientModal({ confirmDelete }) {
 
 DeleteClientModal.propTypes = {
   confirmDelete: PropTypes.func.isRequired,
-  // deleteProvider: PropTypes.func.isRequired,
-  // id: PropTypes.string.isRequired,
+  closeModals: PropTypes.func.isRequired,
 };
 
 export default DeleteClientModal;

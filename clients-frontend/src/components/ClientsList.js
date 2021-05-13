@@ -195,6 +195,29 @@ class ClientsList extends PureComponent {
       })
       .catch((error) => {});
   };
+  deleteClient = (id) => {
+    const url = `http://localhost:3001/client/${id}`;
+    fetch(url, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        if (response.error) {
+          throw response.error;
+        }
+        const newClientList = this.state.clients.filter(
+          (client) => client._id !== id
+        );
+        //this.toggleEditClientModal(null);
+        this.setState({
+          clients: newClientList,
+        });
+      })
+      .catch((error) => {});
+  };
 
   render() {
     const { clients } = this.state;
@@ -247,6 +270,7 @@ class ClientsList extends PureComponent {
             client={this.state.editClient}
             providers={this.state.providers}
             onClose={() => this.toggleEditClientModal(null)}
+            deleteClient={this.deleteClient}
           />
         )}
       </>

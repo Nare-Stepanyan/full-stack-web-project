@@ -20,6 +20,10 @@ class EditClient extends PureComponent {
       showDeleteModal: !this.state.showDeleteModal,
     });
   };
+  closeModals = () => {
+    this.props.deleteClient(this.state._id);
+    this.props.onClose(null);
+  };
   render() {
     const { onClose, providers } = this.props;
     const { name, email, phone, showDeleteModal } = this.state;
@@ -106,7 +110,13 @@ class EditClient extends PureComponent {
           </Modal.Footer>
         </Modal>
         {showDeleteModal && (
-          <DeleteClientModal confirmDelete={this.confirmDelete} />
+          <DeleteClientModal
+            confirmDelete={this.confirmDelete}
+            // deleteClient={deleteClient}
+            // id={this.state._id}
+            // onClose={onClose}
+            closeModals={this.closeModals}
+          />
         )}
       </>
     );
@@ -117,6 +127,7 @@ EditClient.propTypes = {
   client: PropTypes.object.isRequired,
   providers: PropTypes.array.isRequired,
   onClose: PropTypes.func.isRequired,
+  deleteClient: PropTypes.func.isRequired,
 };
 
 export default EditClient;
