@@ -46,6 +46,7 @@ class ClientController {
         _id: req.params.id,
       });
       if (!client) throw error;
+
       req.body.name && (client.name = req.body.name);
       req.body.email && (client.email = req.body.email);
       req.body.phone && (client.phone = req.body.phone);

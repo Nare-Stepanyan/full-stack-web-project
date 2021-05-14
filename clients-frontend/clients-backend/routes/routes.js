@@ -62,6 +62,7 @@ const router = express.Router();
  *  name: Providers
  *  description: Providers serving API-s
  */
+
 /**
  *  @swagger
  *   /client:
@@ -83,9 +84,88 @@ const router = express.Router();
 
 router.get("/client", clientController.get);
 
+/**
+ * @swagger
+ *  /client:
+ *      post:
+ *          summary: Create a new client
+ *          tags: [Clients]
+ *          requestBody:
+ *              required: true
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: "#components/schemas/Clients"
+ *          responses:
+ *              200:
+ *                  description: The client was successfully created
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              $ref: "#components/schemas/Clients"
+ *              500:
+ *                  description: Server error
+ */
+
 router.post("/client", clientController.create);
 
+/**
+ * @swagger
+ *  /client/{id}:
+ *      put:
+ *          summary: Update the client by id
+ *          tags: [Clients]
+ *          parameters:
+ *              - in: path
+ *                name: id
+ *                schema:
+ *                   type: string
+ *                required: true
+ *                description: The client id
+ *          requestBody:
+ *              required: true
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: "#components/schemas/Clients"
+ *          responses:
+ *              200:
+ *                  description: The client was updated
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                               $ref: "#components/schemas/Clients"
+ *              404:
+ *                  description: The client was not found
+ *              500:
+ *                  description: Server error
+ *
+ */
+
 router.put("/client/:id", clientController.update);
+
+/**
+ * @swagger
+ *  /client/{id}:
+ *      delete:
+ *          summary: Delete the client by id
+ *          tags: [Clients]
+ *          parameters:
+ *              - in: path
+ *                name: id
+ *                schema:
+ *                      type: string
+ *                required: true
+ *                description: The client id
+ *          responses:
+ *              200:
+ *                  description: The client was deleted
+ *              404:
+ *                  description: The client was not found
+ *              500:
+ *                  description: Server error
+ *
+ */
 
 router.delete("/client/:id", clientController.delete);
 
