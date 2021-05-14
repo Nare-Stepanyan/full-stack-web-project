@@ -41,3 +41,13 @@ td {
 .cancel-btn {
   margin-right: 10px;
 }
+.error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 60%;
+  margin: 0 auto;
+}
+.error img {
+  max-width: 100%;
+}
