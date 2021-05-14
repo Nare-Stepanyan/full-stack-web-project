@@ -124,20 +124,76 @@ router.get("/provider", providerController.get);
  *                  application/json:
  *                      schema:
  *                          $ref: "#components/schemas/Providers"
- *      responses:
- *          200:
- *              description: The provider was successfully created
- *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: "#components/schemas/Providers"
- *          500:
- *              description: Server error
+ *          responses:
+ *              200:
+ *                  description: The provider was successfully created
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              $ref: "#components/schemas/Providers"
+ *              500:
+ *                  description: Server error
  */
 
 router.post("/provider", providerController.create);
 
+/**
+ * @swagger
+ *  /provider/{id}:
+ *      put:
+ *          summary: Update the provider by id
+ *          tags: [Providers]
+ *          parameters:
+ *              - in: path
+ *                name: id
+ *                schema:
+ *                   type: string
+ *                required: true
+ *                description: The provider id
+ *          requestBody:
+ *              required: true
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: "#components/schemas/Providers"
+ *          responses:
+ *              200:
+ *                  description: The provider was updated
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                               $ref: "#components/schemas/Providers"
+ *              404:
+ *                  description: The provider was not found
+ *              500:
+ *                  description: Server error
+ *
+ */
+
 router.put("/provider/:id", providerController.update);
+
+/**
+ * @swagger
+ *  /provider/{id}:
+ *      delete:
+ *          summary: Delete the provider by id
+ *          tags: [Providers]
+ *          parameters:
+ *              - in: path
+ *                name: id
+ *                schema:
+ *                      type: string
+ *                required: true
+ *                description: The provider id
+ *          responses:
+ *              200:
+ *                  description: The provider was deleted
+ *              404:
+ *                  description: The provider was not found
+ *              500:
+ *                  description: Server error
+ *
+ */
 
 router.delete("/provider/:id", providerController.delete);
 
