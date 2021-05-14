@@ -85,4 +85,4 @@ All API-s are documented and may be tested in `http://localhost:3001/api-docs/`
 
 #### You may find the project frontend components structure at
 
-$ cd clients-frontend/src/images/project-structure.png
+`$ cd clients-frontend/src/images/project-structure.png`
