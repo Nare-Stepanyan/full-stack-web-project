@@ -9,6 +9,7 @@ const swaggerUi = require("swagger-ui-express");
 
 const swaggerOptions = {
   swaggerDefinition: {
+    openapi: "3.0.0",
     info: {
       title: "Clients and Providers API",
       version: "1.0.0",
