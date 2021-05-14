@@ -41,7 +41,7 @@ const router = express.Router();
  *                  properties:
  *                      _id:
  *                          type: string
- *                          description: The auto-generated id of the client.
+ *                          description: The auto-generated id of the provider.
  *                      name:
  *                          type: string
  *                          required: true
@@ -53,14 +53,14 @@ const router = express.Router();
  * @swagger
  * tags:
  *  name: Clients
- *  description: Client serving API-s
+ *  description: Client%20serving%20API-s
  */
 
 /**
  * @swagger
  * tags:
  *  name: Providers
- *  description: Providers serving API-s
+ *  description: Providers%20serving%20API-s
  */
 
 /**
