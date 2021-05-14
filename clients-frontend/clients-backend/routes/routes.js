@@ -53,14 +53,14 @@ const router = express.Router();
  * @swagger
  * tags:
  *  name: Clients
- *  description: Client%20serving%20API-s
+ *  description: Client-serving-API-s
  */
 
 /**
  * @swagger
  * tags:
  *  name: Providers
- *  description: Providers%20serving%20API-s
+ *  description: Providers-serving-API-s
  */
 
 /**
