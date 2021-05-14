@@ -284,6 +284,7 @@ class ClientsList extends PureComponent {
         {this.state.newClientModal && (
           <AddNewClient
             providers={this.state.providers}
+            selectedProviders={this.state.selectedProviders}
             onClose={this.toggleAddNewClientModal}
             addNewProvider={this.addProvider}
             deleteProvider={this.deleteProvider}

@@ -8,10 +8,16 @@ class AddNewClient extends PureComponent {
     providerInput: "",
   };
   handleClick = () => {
-    this.props.addNewProvider(this.state.providerInput);
-    this.setState({
-      providerInput: "",
-    });
+    if (this.state.providerInput !== "") {
+      this.props.addNewProvider(this.state.providerInput);
+      this.setState({
+        providerInput: "",
+      });
+    } else {
+      this.setState({
+        providerInput: "*name is required",
+      });
+    }
   };
   handleChange = (e) => {
     const input = e.target.value;
@@ -29,7 +35,9 @@ class AddNewClient extends PureComponent {
       handleNewClientInfo,
       handleChangeNewClientInfo,
       onCheck,
+      selectedProviders,
     } = this.props;
+
     const { providerInput } = this.state;
     return (
       <Modal show={true} centered>
@@ -86,7 +94,10 @@ class AddNewClient extends PureComponent {
                 />
               </Col>
               <Col sm={4}>
-                <Button variant="light" onClick={this.handleClick}>
+                <Button
+                  variant="light"
+                  onClick={this.handleClick}
+                  disabled={selectedProviders.size > 0 ? true : false}>
                   Add Provider
                 </Button>
               </Col>
@@ -100,6 +111,7 @@ class AddNewClient extends PureComponent {
                     deleteProvider={deleteProvider}
                     saveEditedProvider={saveEditedProvider}
                     onCheck={onCheck}
+                    selectedProviders={selectedProviders}
                   />
                 </Col>
               </Form.Group>
@@ -128,6 +140,7 @@ AddNewClient.propTypes = {
   handleNewClientInfo: PropTypes.func.isRequired,
   handleChangeNewClientInfo: PropTypes.func.isRequired,
   onCheck: PropTypes.func.isRequired,
+  selectedProviders: PropTypes.object,
 };
 
 export default AddNewClient;

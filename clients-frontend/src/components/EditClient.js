@@ -25,10 +25,16 @@ class EditClient extends PureComponent {
   };
 
   handleNewProvider = () => {
-    this.props.addNewProvider(this.state.providerInput);
-    this.setState({
-      providerInput: "",
-    });
+    if (this.state.providerInput !== "") {
+      this.props.addNewProvider(this.state.providerInput);
+      this.setState({
+        providerInput: "",
+      });
+    } else {
+      this.setState({
+        providerInput: "*name is required",
+      });
+    }
   };
   handleChange = (event) => {
     const { name, value } = event.target;
@@ -64,7 +70,6 @@ class EditClient extends PureComponent {
     const { onClose, providers, deleteProvider, saveEditedProvider } =
       this.props;
     const { name, email, phone, providerInput, showDeleteModal } = this.state;
-
     return (
       <>
         <Modal show={true} centered>
@@ -125,7 +130,12 @@ class EditClient extends PureComponent {
                   />
                 </Col>
                 <Col sm={4}>
-                  <Button variant="light" onClick={this.handleNewProvider}>
+                  <Button
+                    variant="light"
+                    onClick={this.handleNewProvider}
+                    disabled={
+                      this.state.selectedProviders.size > 0 ? true : false
+                    }>
                     Add Provider
                   </Button>
                 </Col>

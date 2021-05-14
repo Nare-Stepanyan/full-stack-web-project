@@ -6,7 +6,7 @@ function NotFound() {
   return (
     <div className="error">
       <Link to="/">
-        <img src={error} style={{ cursor: "pointer" }} />
+        <img src={error} style={{ cursor: "pointer" }} alt="Error page" />
       </Link>
     </div>
   );

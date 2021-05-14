@@ -39,17 +39,20 @@ class SingleProvider extends PureComponent {
     } = this.props;
 
     const { showConfirm, showEdit } = this.state;
+    let selectedProviders = [];
+    if (singleClientProviders && singleClientProviders.length > 0) {
+      selectedProviders = singleClientProviders.map((el) => el._id);
+    }
     return (
       <div className="providerList">
         <Col sm={6}>
           <Form.Check
             type="checkbox"
             label={provider.name}
-            onClick={this.handleCheck}
             defaultChecked={
-              singleClientProviders &&
-              singleClientProviders.includes(provider._id)
+              selectedProviders && selectedProviders.includes(provider._id)
             }
+            onClick={this.handleCheck}
           />
         </Col>
         <Col sm={2}>

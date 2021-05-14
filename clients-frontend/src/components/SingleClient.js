@@ -8,7 +8,10 @@ function SingleClient({ newClient, showEditModal }) {
       <td>{newClient.name}</td>
       <td>{newClient.email}</td>
       <td>{newClient.phone}</td>
-      <td>{newClient.providers.join(", ")}</td>
+      <td>
+        {newClient.providers.length > 0 &&
+          newClient.providers.map((el) => el.name).join(", ")}
+      </td>
       <td>
         <Button variant="link" onClick={() => showEditModal(newClient)}>
           Edit
