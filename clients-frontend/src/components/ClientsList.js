@@ -1,5 +1,6 @@
 import React, { PureComponent } from "react";
 import { Table, Button } from "react-bootstrap";
+import Loader from "./Loader";
 import AddNewClient from "./AddNewClient";
 import SingleClient from "./SingleClient";
 import EditClient from "./EditClient";
@@ -15,11 +16,12 @@ class ClientsList extends PureComponent {
     newClientModal: false,
     editClientModal: false,
     editClient: null,
+    spinner: true,
   };
 
   componentDidMount() {
-    this.getClients();
     this.getProviders();
+    this.getClients();
   }
   getProviders = () => {
     const url = "http://localhost:3001/provider";
@@ -31,6 +33,7 @@ class ClientsList extends PureComponent {
         }
         this.setState({
           providers: response,
+          spinner: false,
         });
       })
       .catch((error) => {
@@ -47,6 +50,7 @@ class ClientsList extends PureComponent {
         }
         this.setState({
           clients: response,
+          spinner: false,
         });
       })
       .catch((error) => {
@@ -63,7 +67,11 @@ class ClientsList extends PureComponent {
       editClient: client,
     });
   };
-
+  makeSpinnerWork = () => {
+    this.setState({
+      spinner: true,
+    });
+  };
   handleChange = (event) => {
     const { name, value } = event.target;
     this.setState({
@@ -181,6 +189,7 @@ class ClientsList extends PureComponent {
   };
 
   saveEditedClient = (editedClient) => {
+    this.makeSpinnerWork();
     const url = `http://localhost:3001/client/${editedClient._id}`;
     const body = JSON.stringify(editedClient);
     fetch(url, {
@@ -207,7 +216,6 @@ class ClientsList extends PureComponent {
       })
       .then(() => {
         this.getClients();
-        this.getProviders();
       })
       .catch((error) => {});
   };
@@ -259,7 +267,7 @@ class ClientsList extends PureComponent {
   };
 
   render() {
-    const { clients } = this.state;
+    const { clients, spinner } = this.state;
     const clientList = clients.map((el) => {
       return (
         <SingleClient
@@ -289,9 +297,16 @@ class ClientsList extends PureComponent {
                 <th></th>
               </tr>
             </thead>
-            <tbody>{clientList}</tbody>
+            {spinner ? (
+              <tbody className="loader">
+                <Loader />
+              </tbody>
+            ) : (
+              <tbody> {clientList}</tbody>
+            )}
           </Table>
         </div>
+
         {this.state.newClientModal && (
           <AddNewClient
             providers={this.state.providers}
@@ -303,6 +318,7 @@ class ClientsList extends PureComponent {
             handleNewClientInfo={this.handleClick}
             handleChangeNewClientInfo={this.handleChange}
             onCheck={this.handleCheck}
+            spinner={this.makeSpinnerWork}
           />
         )}
         {!!this.state.editClient && (

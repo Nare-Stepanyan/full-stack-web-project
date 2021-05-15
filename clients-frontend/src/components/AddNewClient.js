@@ -25,14 +25,16 @@ class AddNewClient extends PureComponent {
       providerInput: input,
     });
   };
-
+  handleAdd = () => {
+    this.props.spinner();
+    this.props.handleNewClientInfo();
+  };
   render() {
     const {
       onClose,
       providers,
       deleteProvider,
       saveEditedProvider,
-      handleNewClientInfo,
       handleChangeNewClientInfo,
       onCheck,
       selectedProviders,
@@ -122,7 +124,7 @@ class AddNewClient extends PureComponent {
           <Button variant="light" onClick={onClose}>
             Cancel
           </Button>
-          <Button variant="info" onClick={handleNewClientInfo}>
+          <Button variant="info" onClick={this.handleAdd}>
             Add Client
           </Button>
         </Modal.Footer>
@@ -141,6 +143,7 @@ AddNewClient.propTypes = {
   handleChangeNewClientInfo: PropTypes.func.isRequired,
   onCheck: PropTypes.func.isRequired,
   selectedProviders: PropTypes.object,
+  spinner: PropTypes.func,
 };
 
 export default AddNewClient;

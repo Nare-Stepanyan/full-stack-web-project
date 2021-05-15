@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 function SingleClient({ newClient, showEditModal }) {
   let clientProvidersList = " ";
   if (newClient.providers.length > 0) {
-    clientProvidersList = newClient.providers.map((el) => el.name).join(" ");
+    clientProvidersList = newClient.providers.map((el) => el.name).join(", ");
   }
   return (
     <tr>

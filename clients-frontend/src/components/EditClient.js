@@ -63,6 +63,7 @@ class EditClient extends PureComponent {
       phone,
       providers: [...selectedProviders],
     };
+
     this.props.saveEditedClient(client);
     this.props.onClose(null);
   };

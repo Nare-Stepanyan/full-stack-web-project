@@ -1,4 +1,4 @@
-const { providers, clients } = require("./../models/schemas");
+const { providers } = require("./../models/schemas");
 
 class ProviderController {
   create = async (req, res, next) => {
