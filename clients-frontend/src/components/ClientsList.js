@@ -18,6 +18,10 @@ class ClientsList extends PureComponent {
   };
 
   componentDidMount() {
+    this.getClients();
+    this.getProviders();
+  }
+  getProviders = () => {
     const url = "http://localhost:3001/provider";
     fetch(url)
       .then((res) => res.json())
@@ -32,7 +36,8 @@ class ClientsList extends PureComponent {
       .catch((error) => {
         console.error("Error:", error);
       });
-
+  };
+  getClients = () => {
     const urlClients = "http://localhost:3001/client";
     fetch(urlClients)
       .then((res) => res.json())
@@ -47,7 +52,7 @@ class ClientsList extends PureComponent {
       .catch((error) => {
         console.log("Error:");
       });
-  }
+  };
   toggleAddNewClientModal = () => {
     this.setState({
       newClientModal: !this.state.newClientModal,
@@ -116,6 +121,7 @@ class ClientsList extends PureComponent {
           selectedProviders: new Set(),
         });
       })
+      .then(() => this.getClients())
       .catch((error) => {});
   };
 
@@ -199,6 +205,10 @@ class ClientsList extends PureComponent {
           });
         }
       })
+      .then(() => {
+        this.getClients();
+        this.getProviders();
+      })
       .catch((error) => {});
   };
 
@@ -223,6 +233,7 @@ class ClientsList extends PureComponent {
         });
       })
       .catch((error) => {});
+    this.getClients();
   };
   deleteClient = (id) => {
     const url = `http://localhost:3001/client/${id}`;

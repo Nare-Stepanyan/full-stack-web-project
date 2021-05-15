@@ -26,20 +26,6 @@ class ClientController {
     }
   };
 
-  // get = async (req, res, next) => {
-  //   try {
-  //     await clients.find({}, function (err, result) {
-  //       if (err) {
-  //         res.send(err);
-  //       } else {
-  //         res.send(result);
-  //       }
-  //     });
-  //   } catch (err) {
-  //     next(err);
-  //   }
-  // };
-
   get = (req, res, next) => {
     try {
       clients
