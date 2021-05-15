@@ -5,8 +5,7 @@ const validateEmail = (email) => {
 };
 
 const validatePhone = (num) => {
-  let reg = /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/;
-  return reg.test(num);
+  return num.match(/\d/g);
 };
 
 const validateName = (name) => {
