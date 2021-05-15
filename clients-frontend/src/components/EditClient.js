@@ -3,6 +3,7 @@ import { Button, Modal, Form, Row, Col } from "react-bootstrap";
 import ProviderList from "./ProviderList";
 import PropTypes from "prop-types";
 import DeleteClientModal from "./DeleteClientModal";
+import { isProviderExist } from "./../helpers/utils";
 
 class EditClient extends PureComponent {
   state = {
@@ -25,11 +26,18 @@ class EditClient extends PureComponent {
   };
 
   handleNewProvider = () => {
-    if (this.state.providerInput !== "") {
-      this.props.addNewProvider(this.state.providerInput);
-      this.setState({
-        providerInput: "",
-      });
+    const { providerInput } = this.state;
+    if (providerInput !== "") {
+      if (isProviderExist(providerInput, this.props.providers)) {
+        this.setState({
+          providerInput: "*provider already exists",
+        });
+      } else {
+        this.props.addNewProvider(providerInput);
+        this.setState({
+          providerInput: "",
+        });
+      }
     } else {
       this.setState({
         providerInput: "*name is required",

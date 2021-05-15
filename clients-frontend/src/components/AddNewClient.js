@@ -2,17 +2,25 @@ import React, { PureComponent } from "react";
 import { Button, Modal, Form, Row, Col } from "react-bootstrap";
 import ProviderList from "./ProviderList";
 import PropTypes from "prop-types";
+import { isProviderExist } from "./../helpers/utils";
 
 class AddNewClient extends PureComponent {
   state = {
     providerInput: "",
   };
   handleClick = () => {
-    if (this.state.providerInput !== "") {
-      this.props.addNewProvider(this.state.providerInput);
-      this.setState({
-        providerInput: "",
-      });
+    const { providerInput } = this.state;
+    if (providerInput !== "") {
+      if (isProviderExist(providerInput, this.props.providers)) {
+        this.setState({
+          providerInput: "*provider already exists",
+        });
+      } else {
+        this.props.addNewProvider(providerInput);
+        this.setState({
+          providerInput: "",
+        });
+      }
     } else {
       this.setState({
         providerInput: "*name is required",
