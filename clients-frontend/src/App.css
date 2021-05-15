@@ -112,3 +112,8 @@ td {
     transform: translate(24px, 0);
   }
 }
+.errors {
+  color: red;
+  font-size: 9px;
+  font-weight: bold;
+}

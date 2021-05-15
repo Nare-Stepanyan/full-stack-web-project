@@ -4,6 +4,7 @@ import Loader from "./Loader";
 import AddNewClient from "./AddNewClient";
 import SingleClient from "./SingleClient";
 import EditClient from "./EditClient";
+import { checkData } from "./../helpers/utils";
 
 class ClientsList extends PureComponent {
   state = {
@@ -17,6 +18,7 @@ class ClientsList extends PureComponent {
     editClientModal: false,
     editClient: null,
     spinner: true,
+    errors: null,
   };
 
   componentDidMount() {
@@ -67,6 +69,7 @@ class ClientsList extends PureComponent {
       editClient: client,
     });
   };
+
   makeSpinnerWork = () => {
     this.setState({
       spinner: true,
@@ -91,46 +94,51 @@ class ClientsList extends PureComponent {
     });
   };
   handleClick = () => {
-    const { name, email, phone, selectedProviders } = this.state;
+    const { name, email, phone, selectedProviders, clients } = this.state;
     let providers = [...selectedProviders];
-    if (!name || !email || !phone) {
-      return;
-    }
-    this.makeSpinnerWork();
-    const client = {
-      name,
-      email,
-      phone,
-      providers,
-    };
-    const url = "http://localhost:3001/client";
+    let errors = checkData(name, email, phone, clients);
+    if (Object.values(errors).length > 0) {
+      return this.setState({
+        errors,
+      });
+    } else {
+      this.makeSpinnerWork();
+      const client = {
+        name,
+        email,
+        phone,
+        providers,
+      };
+      const url = "http://localhost:3001/client";
 
-    const body = JSON.stringify(client);
+      const body = JSON.stringify(client);
 
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: body,
-    })
-      .then((res) => res.json())
-      .then((response) => {
-        if (response.error) {
-          throw response.error;
-        }
-        const newClient = response;
-        this.setState({
-          clients: [newClient, ...this.state.clients],
-          newClientModal: false,
-          name: "",
-          email: "",
-          phone: "",
-          selectedProviders: new Set(),
-        });
+      fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: body,
       })
-      .then(() => this.getClients())
-      .catch((error) => {});
+        .then((res) => res.json())
+        .then((response) => {
+          if (response.error) {
+            throw response.error;
+          }
+          const newClient = response;
+          this.setState({
+            clients: [newClient, ...this.state.clients],
+            newClientModal: false,
+            name: "",
+            email: "",
+            phone: "",
+            selectedProviders: new Set(),
+            errors: null,
+          });
+        })
+        .then(() => this.getClients())
+        .catch((error) => {});
+    }
   };
 
   addProvider = (name) => {
@@ -211,6 +219,7 @@ class ClientsList extends PureComponent {
           newClients[editedClientIndex] = response;
           this.setState({
             clients: newClients,
+            errors: null,
           });
         }
       })
@@ -318,6 +327,7 @@ class ClientsList extends PureComponent {
             handleNewClientInfo={this.handleClick}
             handleChangeNewClientInfo={this.handleChange}
             onCheck={this.handleCheck}
+            errors={this.state.errors}
           />
         )}
         {!!this.state.editClient && (
@@ -331,6 +341,7 @@ class ClientsList extends PureComponent {
             saveEditedProvider={this.saveEditedProvider}
             saveEditedClient={this.saveEditedClient}
             onCheck={this.handleCheck}
+            clients={this.state.clients}
           />
         )}
       </>

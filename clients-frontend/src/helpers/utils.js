@@ -1,21 +1,49 @@
+const validateEmail = (email) => {
+  //eslint-disable-next-line
+  let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  return reg.test(email);
+};
+
+const validatePhone = (num) => {
+  let reg = /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/;
+  return reg.test(num);
+};
+
+const validateName = (name) => {
+  let reg = /^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$/;
+  return reg.test(name);
+};
+
 export const isInObject = (data, object) => {
   return Object.values(object).includes(data);
 };
+
 export const isEmailExist = (data, arr) => {
   return arr.some((el) => el.email === data);
 };
+
 export const isProviderExist = (data, arr) => {
   return arr.some((el) => el.name === data);
 };
+
 export const checkData = (name, email, phone, object) => {
   const errors = {};
   if (name === "") {
-    errors.name = "*name is required";
+    errors.name = "*is required";
+  } else if (!validateName(name)) {
+    errors.name = "*invalid";
   }
   if (email === "") {
-    errors.email = "*email is required";
+    errors.email = "*is required";
+  } else if (!validateEmail(email)) {
+    errors.email = "*invalid";
+  } else if (isEmailExist(email, object)) {
+    errors.email = "*email exists";
   }
   if (phone === "") {
-    errors.phone = "*phone is required";
+    errors.phone = "*is required";
+  } else if (!validatePhone(phone)) {
+    errors.phone = "*invalid";
   }
+  return errors;
 };

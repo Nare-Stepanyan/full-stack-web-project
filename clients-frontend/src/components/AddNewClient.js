@@ -43,6 +43,7 @@ class AddNewClient extends PureComponent {
       onCheck,
       selectedProviders,
       handleNewClientInfo,
+      errors,
     } = this.props;
     const { providerInput } = this.state;
     return (
@@ -55,6 +56,9 @@ class AddNewClient extends PureComponent {
             <Form.Group as={Row} controlId="formHorizontalName">
               <Form.Label column sm={2}>
                 Name:
+                {!!errors && errors.name && (
+                  <span className="errors"> {errors.name} </span>
+                )}
               </Form.Label>
               <Col sm={10}>
                 <Form.Control
@@ -67,6 +71,9 @@ class AddNewClient extends PureComponent {
             <Form.Group as={Row} controlId="formHorizontalEmail">
               <Form.Label column sm={2}>
                 Email:
+                {!!errors && errors.email && (
+                  <span className="errors"> {errors.email} </span>
+                )}
               </Form.Label>
               <Col sm={10}>
                 <Form.Control
@@ -79,6 +86,9 @@ class AddNewClient extends PureComponent {
             <Form.Group as={Row} controlId="formHorizontalPhone">
               <Form.Label column sm={2}>
                 Phone:
+                {!!errors && errors.phone && (
+                  <span className="errors"> {errors.phone} </span>
+                )}
               </Form.Label>
               <Col sm={10}>
                 <Form.Control
@@ -147,6 +157,7 @@ AddNewClient.propTypes = {
   handleChangeNewClientInfo: PropTypes.func.isRequired,
   onCheck: PropTypes.func.isRequired,
   selectedProviders: PropTypes.object,
+  errors: PropTypes.object,
 };
 
 export default AddNewClient;
