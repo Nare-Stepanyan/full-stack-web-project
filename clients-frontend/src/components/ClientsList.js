@@ -96,7 +96,7 @@ class ClientsList extends PureComponent {
     if (!name || !email || !phone) {
       return;
     }
-
+    this.makeSpinnerWork();
     const client = {
       name,
       email,
@@ -318,7 +318,6 @@ class ClientsList extends PureComponent {
             handleNewClientInfo={this.handleClick}
             handleChangeNewClientInfo={this.handleChange}
             onCheck={this.handleCheck}
-            spinner={this.makeSpinnerWork}
           />
         )}
         {!!this.state.editClient && (

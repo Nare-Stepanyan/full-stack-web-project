@@ -9,7 +9,7 @@ class EditClient extends PureComponent {
     ...this.props.client,
     showDeleteModal: false,
     providerInput: "",
-    selectedProviders: new Set(this.props.client.providers),
+    selectedProviders: new Set(this.props.client.providers.map((el) => el._id)),
   };
 
   handleCheck = (id) => {
@@ -20,7 +20,7 @@ class EditClient extends PureComponent {
       selectedProviders.add(id);
     }
     this.setState({
-      selectedProviders,
+      selectedProviders: new Set(selectedProviders),
     });
   };
 
@@ -63,7 +63,6 @@ class EditClient extends PureComponent {
       phone,
       providers: [...selectedProviders],
     };
-
     this.props.saveEditedClient(client);
     this.props.onClose(null);
   };
@@ -131,12 +130,7 @@ class EditClient extends PureComponent {
                   />
                 </Col>
                 <Col sm={4}>
-                  <Button
-                    variant="light"
-                    onClick={this.handleNewProvider}
-                    disabled={
-                      this.state.selectedProviders.size > 0 ? true : false
-                    }>
+                  <Button variant="light" onClick={this.handleNewProvider}>
                     Add Provider
                   </Button>
                 </Col>
