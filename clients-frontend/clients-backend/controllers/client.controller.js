@@ -26,19 +26,6 @@ class ClientController {
     }
   };
 
-  // get = (req, res, next) => {
-  //   try {
-  //     clients
-  //       .find({})
-  //       .populate("providers")
-  //       .then((providers) => {
-  //         res.json(providers);
-  //       });
-  //   } catch (err) {
-  //     next(err);
-  //   }
-  // };
-
   get = (req, res, next) => {
     try {
       const { query } = req;
