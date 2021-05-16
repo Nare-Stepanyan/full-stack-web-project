@@ -26,6 +26,7 @@ class ClientsList extends PureComponent {
     this.getProviders();
     this.getClients();
   }
+
   getProviders = () => {
     const url = "http://localhost:3001/provider";
     fetch(url)
@@ -43,9 +44,21 @@ class ClientsList extends PureComponent {
         console.error("Error:", error);
       });
   };
+
   getClients = (data = {}) => {
-    const urlClients = "http://localhost:3001/client";
-    fetch(urlClients)
+    const url = "http://localhost:3001/client";
+
+    let query = "?";
+
+    for (let key in data) {
+      let value = data[key];
+      query = `${query}${key}=${value}&`;
+    }
+    if (query === "?") {
+      query = "";
+    }
+
+    fetch(url + query)
       .then((res) => res.json())
       .then((response) => {
         if (response.error) {
@@ -60,11 +73,13 @@ class ClientsList extends PureComponent {
         console.log("Error:");
       });
   };
+
   toggleAddNewClientModal = () => {
     this.setState({
       newClientModal: !this.state.newClientModal,
     });
   };
+
   toggleEditClientModal = (client) => {
     this.setState({
       editClient: client,
@@ -76,6 +91,7 @@ class ClientsList extends PureComponent {
       spinner: true,
     });
   };
+
   handleChange = (event) => {
     const { name, value } = event.target;
     this.setState({
@@ -94,6 +110,7 @@ class ClientsList extends PureComponent {
       selectedProviders,
     });
   };
+
   handleClick = () => {
     const { name, email, phone, selectedProviders, clients } = this.state;
     let providers = [...selectedProviders];
@@ -253,6 +270,7 @@ class ClientsList extends PureComponent {
       .catch((error) => {});
     this.getClients();
   };
+
   deleteClient = (id) => {
     const url = `http://localhost:3001/client/${id}`;
     fetch(url, {
