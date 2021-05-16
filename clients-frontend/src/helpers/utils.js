@@ -1,3 +1,7 @@
+export const upper = (lower) => {
+  return lower.charAt(0).toUpperCase() + lower.substring(1);
+};
+
 const validateEmail = (email) => {
   //eslint-disable-next-line
   let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -5,7 +9,8 @@ const validateEmail = (email) => {
 };
 
 const validatePhone = (num) => {
-  return num.match(/\d/g);
+  let reg = /\d/g;
+  return reg.test(num);
 };
 
 const validateName = (name) => {

@@ -13,6 +13,11 @@ const clientSchema = new Schema({
     trim: true,
     minlength: 2,
     maxlength: 24,
+    validate: {
+      validator: (lower) => {
+        return lower.charAt(0).toUpperCase() + lower.substring(1);
+      },
+    },
   },
   email: {
     type: String,
@@ -28,19 +33,41 @@ const clientSchema = new Schema({
   phone: {
     type: Number,
     required: true,
+    validate: {
+      validator: function (v) {
+        return /\d/g.test(v);
+      },
+      message: (props) => `${props.value} is not a valid phone number!`,
+    },
+    required: [true, "User phone number required"],
   },
   providers: {
     type: [{ type: ObjectId, ref: "provider" }],
   },
+});
+clientSchema.pre("save", function (next) {
+  this.name =
+    this.name.trim()[0].toUpperCase() + this.name.slice(1).toLowerCase();
+  next();
 });
 
 const providerSchema = new Schema({
   name: {
     type: String,
     unique: true,
+    validate: {
+      validator: (lower) => {
+        return lower.charAt(0).toUpperCase() + lower.substring(1);
+      },
+    },
   },
 });
 
+providerSchema.pre("save", function (next) {
+  this.name =
+    this.name.trim()[0].toUpperCase() + this.name.slice(1).toLowerCase();
+  next();
+});
 const clients = mongoose.model("client", clientSchema, "clients");
 const providers = mongoose.model("provider", providerSchema, "providers");
 

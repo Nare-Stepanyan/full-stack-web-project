@@ -308,10 +308,14 @@ class ClientsList extends PureComponent {
             </thead>
             {spinner ? (
               <tbody className="loader">
-                <Loader />
+                <tr>
+                  <td>
+                    <Loader />
+                  </td>
+                </tr>
               </tbody>
             ) : (
-              <tbody> {clientList}</tbody>
+              <tbody>{clientList}</tbody>
             )}
           </Table>
         </div>
