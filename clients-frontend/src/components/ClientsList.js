@@ -5,6 +5,8 @@ import AddNewClient from "./AddNewClient";
 import SingleClient from "./SingleClient";
 import EditClient from "./EditClient";
 import { checkData } from "./../helpers/utils";
+import Search from "./Search";
+import request from "./../helpers/request";
 
 class ClientsList extends PureComponent {
   state = {
@@ -25,14 +27,11 @@ class ClientsList extends PureComponent {
     this.getProviders();
     this.getClients();
   }
+
   getProviders = () => {
     const url = "http://localhost:3001/provider";
-    fetch(url)
-      .then((res) => res.json())
+    request(url)
       .then((response) => {
-        if (response.error) {
-          throw response.error;
-        }
         this.setState({
           providers: response,
           spinner: false,
@@ -42,14 +41,20 @@ class ClientsList extends PureComponent {
         console.error("Error:", error);
       });
   };
-  getClients = () => {
-    const urlClients = "http://localhost:3001/client";
-    fetch(urlClients)
-      .then((res) => res.json())
+
+  getClients = (data = {}) => {
+    let query = "?";
+
+    for (let key in data) {
+      let value = data[key];
+      query = `${query}${key}=${value}&`;
+    }
+    if (query === "?") {
+      query = "";
+    }
+    const url = `http://localhost:3001/client${query}`;
+    request(url)
       .then((response) => {
-        if (response.error) {
-          throw response.error;
-        }
         this.setState({
           clients: response,
           spinner: false,
@@ -59,11 +64,13 @@ class ClientsList extends PureComponent {
         console.log("Error:");
       });
   };
+
   toggleAddNewClientModal = () => {
     this.setState({
       newClientModal: !this.state.newClientModal,
     });
   };
+
   toggleEditClientModal = (client) => {
     this.setState({
       editClient: client,
@@ -75,6 +82,7 @@ class ClientsList extends PureComponent {
       spinner: true,
     });
   };
+
   handleChange = (event) => {
     const { name, value } = event.target;
     this.setState({
@@ -93,6 +101,7 @@ class ClientsList extends PureComponent {
       selectedProviders,
     });
   };
+
   handleClick = () => {
     const { name, email, phone, selectedProviders, clients } = this.state;
     let providers = [...selectedProviders];
@@ -111,20 +120,10 @@ class ClientsList extends PureComponent {
       };
       const url = "http://localhost:3001/client";
 
-      const body = JSON.stringify(client);
+      const body = client;
 
-      fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: body,
-      })
-        .then((res) => res.json())
+      request(url, "POST", body)
         .then((response) => {
-          if (response.error) {
-            throw response.error;
-          }
           const newClient = response;
           this.setState({
             clients: [newClient, ...this.state.clients],
@@ -146,19 +145,9 @@ class ClientsList extends PureComponent {
     const found = providers.some((el) => el.name === name);
     if (!found) {
       const url = "http://localhost:3001/provider";
-      const body = JSON.stringify({ name });
-      fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body,
-      })
-        .then((res) => res.json())
+      const body = { name };
+      request(url, "POST", body)
         .then((response) => {
-          if (response.error) {
-            throw response.error;
-          }
           const newProvider = response;
           this.setState({
             providers: [...this.state.providers, newProvider],
@@ -170,28 +159,17 @@ class ClientsList extends PureComponent {
 
   saveEditedProvider = (editedProvider) => {
     const url = `http://localhost:3001/provider/${editedProvider._id}`;
-    const body = JSON.stringify(editedProvider);
-    fetch(url, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body,
-    })
-      .then((res) => res.json())
+    const body = editedProvider;
+    request(url, "PUT", body)
       .then((response) => {
-        if (response.error) {
-          throw response.error;
-        } else {
-          const newProviders = [...this.state.providers];
-          const editedProviderIndex = this.state.providers.findIndex(
-            (provider) => provider._id === editedProvider._id
-          );
-          newProviders[editedProviderIndex] = response;
-          this.setState({
-            providers: newProviders,
-          });
-        }
+        const newProviders = [...this.state.providers];
+        const editedProviderIndex = this.state.providers.findIndex(
+          (provider) => provider._id === editedProvider._id
+        );
+        newProviders[editedProviderIndex] = response;
+        this.setState({
+          providers: newProviders,
+        });
       })
       .catch((error) => {});
   };
@@ -199,29 +177,18 @@ class ClientsList extends PureComponent {
   saveEditedClient = (editedClient) => {
     this.makeSpinnerWork();
     const url = `http://localhost:3001/client/${editedClient._id}`;
-    const body = JSON.stringify(editedClient);
-    fetch(url, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body,
-    })
-      .then((res) => res.json())
+    const body = editedClient;
+    request(url, "PUT", body)
       .then((response) => {
-        if (response.error) {
-          throw response.error;
-        } else {
-          const newClients = [...this.state.clients];
-          const editedClientIndex = this.state.clients.findIndex(
-            (client) => client._id === editedClient._id
-          );
-          newClients[editedClientIndex] = response;
-          this.setState({
-            clients: newClients,
-            errors: null,
-          });
-        }
+        const newClients = [...this.state.clients];
+        const editedClientIndex = this.state.clients.findIndex(
+          (client) => client._id === editedClient._id
+        );
+        newClients[editedClientIndex] = response;
+        this.setState({
+          clients: newClients,
+          errors: null,
+        });
       })
       .then(() => {
         this.getClients();
@@ -231,17 +198,8 @@ class ClientsList extends PureComponent {
 
   deleteProvider = (id) => {
     const url = `http://localhost:3001/provider/${id}`;
-    fetch(url, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((response) => {
-        if (response.error) {
-          throw response.error;
-        }
+    request(url, "DELETE")
+      .then(() => {
         const newProviders = this.state.providers.filter(
           (provider) => provider._id !== id
         );
@@ -252,19 +210,11 @@ class ClientsList extends PureComponent {
       .catch((error) => {});
     this.getClients();
   };
+
   deleteClient = (id) => {
     const url = `http://localhost:3001/client/${id}`;
-    fetch(url, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((response) => {
-        if (response.error) {
-          throw response.error;
-        }
+    request(url, "DELETE")
+      .then(() => {
         const newClientList = this.state.clients.filter(
           (client) => client._id !== id
         );
@@ -288,10 +238,15 @@ class ClientsList extends PureComponent {
       );
     });
     return (
-      <>
+      <div className="app">
+        <div>
+          {clients.length > 0 && <Search getClients={this.getClients} />}
+        </div>
         <div className="table-wrapper">
           <div className="client-list">
-            <h3>Clients</h3>
+            <Button variant="custom" onClick={this.getClients}>
+              <h3>Clients</h3>
+            </Button>
             <Button variant="info" onClick={this.toggleAddNewClientModal}>
               New Client
             </Button>
@@ -319,7 +274,6 @@ class ClientsList extends PureComponent {
             )}
           </Table>
         </div>
-
         {this.state.newClientModal && (
           <AddNewClient
             providers={this.state.providers}
@@ -348,7 +302,7 @@ class ClientsList extends PureComponent {
             clients={this.state.clients}
           />
         )}
-      </>
+      </div>
     );
   }
 }
