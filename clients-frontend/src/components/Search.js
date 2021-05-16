@@ -7,6 +7,7 @@ import {
   FormControl,
   NavDropdown,
 } from "react-bootstrap";
+import PropTypes from "prop-types";
 
 const sortOptions = [
   {
@@ -79,4 +80,7 @@ function Search(props) {
   );
 }
 
+Search.propTypes = {
+  getClients: PropTypes.func.isRequired,
+};
 export default Search;
