@@ -1,6 +1,6 @@
 .wrapper {
   max-width: 1440px;
-  margin: 60px auto;
+  margin: 30px auto;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -116,4 +116,13 @@ td {
   color: red;
   font-size: 9px;
   font-weight: bold;
+}
+.search {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 15px;
+}
+.app {
+  width: 100%;
 }

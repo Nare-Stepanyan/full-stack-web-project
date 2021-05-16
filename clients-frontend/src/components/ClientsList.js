@@ -5,6 +5,7 @@ import AddNewClient from "./AddNewClient";
 import SingleClient from "./SingleClient";
 import EditClient from "./EditClient";
 import { checkData } from "./../helpers/utils";
+import Search from "./Search";
 
 class ClientsList extends PureComponent {
   state = {
@@ -42,7 +43,7 @@ class ClientsList extends PureComponent {
         console.error("Error:", error);
       });
   };
-  getClients = () => {
+  getClients = (data = {}) => {
     const urlClients = "http://localhost:3001/client";
     fetch(urlClients)
       .then((res) => res.json())
@@ -288,10 +289,15 @@ class ClientsList extends PureComponent {
       );
     });
     return (
-      <>
+      <div className="app">
+        <div>
+          {clients.length > 0 && <Search getClients={this.getClients} />}
+        </div>
         <div className="table-wrapper">
           <div className="client-list">
-            <h3>Clients</h3>
+            <Button variant="custom" onClick={this.getClients}>
+              <h3>Clients</h3>
+            </Button>
             <Button variant="info" onClick={this.toggleAddNewClientModal}>
               New Client
             </Button>
@@ -319,7 +325,6 @@ class ClientsList extends PureComponent {
             )}
           </Table>
         </div>
-
         {this.state.newClientModal && (
           <AddNewClient
             providers={this.state.providers}
@@ -348,7 +353,7 @@ class ClientsList extends PureComponent {
             clients={this.state.clients}
           />
         )}
-      </>
+      </div>
     );
   }
 }
