@@ -26,11 +26,44 @@ class ClientController {
     }
   };
 
+  // get = (req, res, next) => {
+  //   try {
+  //     clients
+  //       .find({})
+  //       .populate("providers")
+  //       .then((providers) => {
+  //         res.json(providers);
+  //       });
+  //   } catch (err) {
+  //     next(err);
+  //   }
+  // };
+
   get = (req, res, next) => {
     try {
+      const { query } = req;
+      const dbQuery = {};
+
+      if (query.search) {
+        const searchReg = new RegExp(query.search, "ig");
+        dbQuery.$or = [{ name: searchReg }, { email: searchReg }];
+      }
+
+      const sort = {};
+      if (query.sort) {
+        switch (query.sort) {
+          case "a-z":
+            sort.name = 1;
+            break;
+          case "z-a":
+            sort.name = -1;
+        }
+      }
       clients
-        .find({})
+        .find(dbQuery)
+        .sort(sort)
         .populate("providers")
+        .exec()
         .then((providers) => {
           res.json(providers);
         });
@@ -38,6 +71,7 @@ class ClientController {
       next(err);
     }
   };
+
   update = async (req, res, next) => {
     try {
       const client = await clients.findOne({
