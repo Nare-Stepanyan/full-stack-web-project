@@ -3,13 +3,15 @@ import { Button, Modal, Form, Row, Col } from "react-bootstrap";
 import ProviderList from "./ProviderList";
 import PropTypes from "prop-types";
 import DeleteClientModal from "./DeleteClientModal";
+import { isProviderExist, checkData } from "./../helpers/utils";
 
 class EditClient extends PureComponent {
   state = {
     ...this.props.client,
     showDeleteModal: false,
     providerInput: "",
-    selectedProviders: new Set(this.props.client.providers),
+    selectedProviders: new Set(this.props.client.providers.map((el) => el._id)),
+    errors: null,
   };
 
   handleCheck = (id) => {
@@ -20,15 +22,28 @@ class EditClient extends PureComponent {
       selectedProviders.add(id);
     }
     this.setState({
-      selectedProviders,
+      selectedProviders: new Set(selectedProviders),
     });
   };
 
   handleNewProvider = () => {
-    this.props.addNewProvider(this.state.providerInput);
-    this.setState({
-      providerInput: "",
-    });
+    const { providerInput } = this.state;
+    if (providerInput !== "") {
+      if (isProviderExist(providerInput, this.props.providers)) {
+        this.setState({
+          providerInput: "*provider already exists",
+        });
+      } else {
+        this.props.addNewProvider(providerInput);
+        this.setState({
+          providerInput: "",
+        });
+      }
+    } else {
+      this.setState({
+        providerInput: "*name is required",
+      });
+    }
   };
   handleChange = (event) => {
     const { name, value } = event.target;
@@ -47,9 +62,6 @@ class EditClient extends PureComponent {
   };
   saveChanges = () => {
     const { _id, name, email, phone, selectedProviders } = this.state;
-    if (!name || !email || !phone) {
-      return;
-    }
     const client = {
       _id,
       name,
@@ -57,13 +69,32 @@ class EditClient extends PureComponent {
       phone,
       providers: [...selectedProviders],
     };
-    this.props.saveEditedClient(client);
-    this.props.onClose(null);
+
+    let errors = checkData(
+      client.name,
+      client.email,
+      client.phone,
+      this.props.clients
+    );
+
+    if (Object.values(errors).length > 0) {
+      if (this.state.email === this.props.client.email) {
+        delete errors.email;
+        this.setState({
+          errors,
+        });
+      }
+    }
+    if (Object.values(errors).length === 0) {
+      this.props.saveEditedClient(client);
+      this.props.onClose(null);
+    }
   };
   render() {
     const { onClose, providers, deleteProvider, saveEditedProvider } =
       this.props;
-    const { name, email, phone, providerInput, showDeleteModal } = this.state;
+    const { name, email, phone, providerInput, showDeleteModal, errors } =
+      this.state;
 
     return (
       <>
@@ -76,6 +107,9 @@ class EditClient extends PureComponent {
               <Form.Group as={Row} controlId="formHorizontalName">
                 <Form.Label column sm={2}>
                   Name:
+                  {!!errors && errors.name && (
+                    <span className="errors"> {errors.name} </span>
+                  )}
                 </Form.Label>
                 <Col sm={10}>
                   <Form.Control
@@ -89,6 +123,9 @@ class EditClient extends PureComponent {
               <Form.Group as={Row} controlId="formHorizontalEmail">
                 <Form.Label column sm={2}>
                   Email:
+                  {!!errors && errors.email && (
+                    <span className="errors"> {errors.email} </span>
+                  )}
                 </Form.Label>
                 <Col sm={10}>
                   <Form.Control
@@ -102,6 +139,9 @@ class EditClient extends PureComponent {
               <Form.Group as={Row} controlId="formHorizontalPhone">
                 <Form.Label column sm={2}>
                   Phone:
+                  {!!errors && errors.phone && (
+                    <span className="errors"> {errors.phone} </span>
+                  )}
                 </Form.Label>
                 <Col sm={10}>
                   <Form.Control

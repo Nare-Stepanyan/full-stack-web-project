@@ -1,8 +1,10 @@
 import React, { PureComponent } from "react";
 import { Table, Button } from "react-bootstrap";
+import Loader from "./Loader";
 import AddNewClient from "./AddNewClient";
 import SingleClient from "./SingleClient";
 import EditClient from "./EditClient";
+import { checkData } from "./../helpers/utils";
 
 class ClientsList extends PureComponent {
   state = {
@@ -15,9 +17,15 @@ class ClientsList extends PureComponent {
     newClientModal: false,
     editClientModal: false,
     editClient: null,
+    spinner: true,
+    errors: null,
   };
 
   componentDidMount() {
+    this.getProviders();
+    this.getClients();
+  }
+  getProviders = () => {
     const url = "http://localhost:3001/provider";
     fetch(url)
       .then((res) => res.json())
@@ -27,12 +35,14 @@ class ClientsList extends PureComponent {
         }
         this.setState({
           providers: response,
+          spinner: false,
         });
       })
       .catch((error) => {
         console.error("Error:", error);
       });
-
+  };
+  getClients = () => {
     const urlClients = "http://localhost:3001/client";
     fetch(urlClients)
       .then((res) => res.json())
@@ -42,12 +52,13 @@ class ClientsList extends PureComponent {
         }
         this.setState({
           clients: response,
+          spinner: false,
         });
       })
       .catch((error) => {
         console.log("Error:");
       });
-  }
+  };
   toggleAddNewClientModal = () => {
     this.setState({
       newClientModal: !this.state.newClientModal,
@@ -59,6 +70,11 @@ class ClientsList extends PureComponent {
     });
   };
 
+  makeSpinnerWork = () => {
+    this.setState({
+      spinner: true,
+    });
+  };
   handleChange = (event) => {
     const { name, value } = event.target;
     this.setState({
@@ -78,45 +94,51 @@ class ClientsList extends PureComponent {
     });
   };
   handleClick = () => {
-    const { name, email, phone, selectedProviders } = this.state;
+    const { name, email, phone, selectedProviders, clients } = this.state;
     let providers = [...selectedProviders];
-    if (!name || !email || !phone) {
-      return;
-    }
+    let errors = checkData(name, email, phone, clients);
+    if (Object.values(errors).length > 0) {
+      return this.setState({
+        errors,
+      });
+    } else {
+      this.makeSpinnerWork();
+      const client = {
+        name,
+        email,
+        phone,
+        providers,
+      };
+      const url = "http://localhost:3001/client";
 
-    const client = {
-      name,
-      email,
-      phone,
-      providers,
-    };
-    const url = "http://localhost:3001/client";
+      const body = JSON.stringify(client);
 
-    const body = JSON.stringify(client);
-
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: body,
-    })
-      .then((res) => res.json())
-      .then((response) => {
-        if (response.error) {
-          throw response.error;
-        }
-        const newClient = response;
-        this.setState({
-          clients: [newClient, ...this.state.clients],
-          newClientModal: false,
-          name: "",
-          email: "",
-          phone: "",
-          selectedProviders: new Set(),
-        });
+      fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: body,
       })
-      .catch((error) => {});
+        .then((res) => res.json())
+        .then((response) => {
+          if (response.error) {
+            throw response.error;
+          }
+          const newClient = response;
+          this.setState({
+            clients: [newClient, ...this.state.clients],
+            newClientModal: false,
+            name: "",
+            email: "",
+            phone: "",
+            selectedProviders: new Set(),
+            errors: null,
+          });
+        })
+        .then(() => this.getClients())
+        .catch((error) => {});
+    }
   };
 
   addProvider = (name) => {
@@ -175,6 +197,7 @@ class ClientsList extends PureComponent {
   };
 
   saveEditedClient = (editedClient) => {
+    this.makeSpinnerWork();
     const url = `http://localhost:3001/client/${editedClient._id}`;
     const body = JSON.stringify(editedClient);
     fetch(url, {
@@ -196,8 +219,12 @@ class ClientsList extends PureComponent {
           newClients[editedClientIndex] = response;
           this.setState({
             clients: newClients,
+            errors: null,
           });
         }
+      })
+      .then(() => {
+        this.getClients();
       })
       .catch((error) => {});
   };
@@ -223,6 +250,7 @@ class ClientsList extends PureComponent {
         });
       })
       .catch((error) => {});
+    this.getClients();
   };
   deleteClient = (id) => {
     const url = `http://localhost:3001/client/${id}`;
@@ -248,7 +276,7 @@ class ClientsList extends PureComponent {
   };
 
   render() {
-    const { clients } = this.state;
+    const { clients, spinner } = this.state;
     const clientList = clients.map((el) => {
       return (
         <SingleClient
@@ -278,12 +306,24 @@ class ClientsList extends PureComponent {
                 <th></th>
               </tr>
             </thead>
-            <tbody>{clientList}</tbody>
+            {spinner ? (
+              <tbody className="loader">
+                <tr>
+                  <td>
+                    <Loader />
+                  </td>
+                </tr>
+              </tbody>
+            ) : (
+              <tbody>{clientList}</tbody>
+            )}
           </Table>
         </div>
+
         {this.state.newClientModal && (
           <AddNewClient
             providers={this.state.providers}
+            selectedProviders={this.state.selectedProviders}
             onClose={this.toggleAddNewClientModal}
             addNewProvider={this.addProvider}
             deleteProvider={this.deleteProvider}
@@ -291,6 +331,7 @@ class ClientsList extends PureComponent {
             handleNewClientInfo={this.handleClick}
             handleChangeNewClientInfo={this.handleChange}
             onCheck={this.handleCheck}
+            errors={this.state.errors}
           />
         )}
         {!!this.state.editClient && (
@@ -304,6 +345,7 @@ class ClientsList extends PureComponent {
             saveEditedProvider={this.saveEditedProvider}
             saveEditedClient={this.saveEditedClient}
             onCheck={this.handleCheck}
+            clients={this.state.clients}
           />
         )}
       </>

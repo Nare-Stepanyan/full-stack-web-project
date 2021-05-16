@@ -26,20 +26,18 @@ class ClientController {
     }
   };
 
-  get = async (req, res, next) => {
+  get = (req, res, next) => {
     try {
-      await clients.find({}, function (err, result) {
-        if (err) {
-          res.send(err);
-        } else {
-          res.send(result);
-        }
-      });
+      clients
+        .find({})
+        .populate("providers")
+        .then((providers) => {
+          res.json(providers);
+        });
     } catch (err) {
       next(err);
     }
   };
-
   update = async (req, res, next) => {
     try {
       const client = await clients.findOne({
