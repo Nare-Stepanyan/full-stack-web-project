@@ -1,0 +1,21 @@
+{
+  "files": {
+    "main.css": "/full-stack-web-project/static/css/main.92cc8c64.chunk.css",
+    "main.js": "/full-stack-web-project/static/js/main.eb3f1be2.chunk.js",
+    "main.js.map": "/full-stack-web-project/static/js/main.eb3f1be2.chunk.js.map",
+    "runtime-main.js": "/full-stack-web-project/static/js/runtime-main.2423a9ff.js",
+    "runtime-main.js.map": "/full-stack-web-project/static/js/runtime-main.2423a9ff.js.map",
+    "static/js/2.e6acac25.chunk.js": "/full-stack-web-project/static/js/2.e6acac25.chunk.js",
+    "static/js/2.e6acac25.chunk.js.map": "/full-stack-web-project/static/js/2.e6acac25.chunk.js.map",
+    "index.html": "/full-stack-web-project/index.html",
+    "static/css/main.92cc8c64.chunk.css.map": "/full-stack-web-project/static/css/main.92cc8c64.chunk.css.map",
+    "static/js/2.e6acac25.chunk.js.LICENSE.txt": "/full-stack-web-project/static/js/2.e6acac25.chunk.js.LICENSE.txt",
+    "static/media/error.0f3da28f.jpeg": "/full-stack-web-project/static/media/error.0f3da28f.jpeg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.2423a9ff.js",
+    "static/js/2.e6acac25.chunk.js",
+    "static/css/main.92cc8c64.chunk.css",
+    "static/js/main.eb3f1be2.chunk.js"
+  ]
+}
