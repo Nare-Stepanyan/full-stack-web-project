@@ -6,6 +6,7 @@ const cors = require("cors");
 const routesUrls = require("./routes/routes");
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
+app.use(express.static(path.join(__dirname, "build")));
 
 const swaggerOptions = {
   swaggerDefinition: {
@@ -37,7 +38,7 @@ db.once("open", function () {
   console.log("db connected!");
 });
 
-app.use(express.json());
+app.use(express.static("public"));
 app.use(cors());
 app.use("/", routesUrls);
 

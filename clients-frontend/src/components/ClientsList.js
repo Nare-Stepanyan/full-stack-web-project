@@ -178,7 +178,7 @@ class ClientsList extends PureComponent {
 
   saveEditedClient = (editedClient) => {
     this.makeSpinnerWork();
-    const url =  const url = `${apiUrl}/client/${editedClient._id}`;
+    const url = `${apiUrl}/client/${editedClient._id}`;
     const body = editedClient;
     request(url, "PUT", body)
       .then((response) => {
