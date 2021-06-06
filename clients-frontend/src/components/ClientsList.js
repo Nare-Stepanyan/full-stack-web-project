@@ -8,6 +8,8 @@ import { checkData } from "./../helpers/utils";
 import Search from "./Search";
 import request from "./../helpers/request";
 
+const apiUrl = process.env.REACT_APP_API_URL;
+
 class ClientsList extends PureComponent {
   state = {
     name: "",
@@ -29,7 +31,7 @@ class ClientsList extends PureComponent {
   }
 
   getProviders = () => {
-    const url = "http://localhost:3001/provider";
+    const url = `${apiUrl}/provider`;
     request(url)
       .then((response) => {
         this.setState({
@@ -52,7 +54,7 @@ class ClientsList extends PureComponent {
     if (query === "?") {
       query = "";
     }
-    const url = `http://localhost:3001/client${query}`;
+    const url = `${apiUrl}/client${query}`;
     request(url)
       .then((response) => {
         this.setState({
@@ -118,7 +120,7 @@ class ClientsList extends PureComponent {
         phone,
         providers,
       };
-      const url = "http://localhost:3001/client";
+      const url = `${apiUrl}/client`;
 
       const body = client;
 
@@ -144,7 +146,7 @@ class ClientsList extends PureComponent {
     const { providers } = this.state;
     const found = providers.some((el) => el.name === name);
     if (!found) {
-      const url = "http://localhost:3001/provider";
+      const url = `${apiUrl}/provider`;
       const body = { name };
       request(url, "POST", body)
         .then((response) => {
@@ -158,7 +160,7 @@ class ClientsList extends PureComponent {
   };
 
   saveEditedProvider = (editedProvider) => {
-    const url = `http://localhost:3001/provider/${editedProvider._id}`;
+    const url = `${apiUrl}/provider/${editedProvider._id}`;
     const body = editedProvider;
     request(url, "PUT", body)
       .then((response) => {
@@ -176,7 +178,7 @@ class ClientsList extends PureComponent {
 
   saveEditedClient = (editedClient) => {
     this.makeSpinnerWork();
-    const url = `http://localhost:3001/client/${editedClient._id}`;
+    const url = `${apiUrl}/client/${editedClient._id}`;
     const body = editedClient;
     request(url, "PUT", body)
       .then((response) => {
@@ -197,7 +199,7 @@ class ClientsList extends PureComponent {
   };
 
   deleteProvider = (id) => {
-    const url = `http://localhost:3001/provider/${id}`;
+    const url = `${apiUrl}/provider/${id}`;
     request(url, "DELETE")
       .then(() => {
         const newProviders = this.state.providers.filter(
@@ -212,7 +214,7 @@ class ClientsList extends PureComponent {
   };
 
   deleteClient = (id) => {
-    const url = `http://localhost:3001/client/${id}`;
+    const url = `${apiUrl}/client/${id}`;
     request(url, "DELETE")
       .then(() => {
         const newClientList = this.state.clients.filter(

@@ -6,6 +6,8 @@ const cors = require("cors");
 const routesUrls = require("./routes/routes");
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
+const path = require("path");
+app.use(express.static(path.join(__dirname, "build")));
 
 const swaggerOptions = {
   swaggerDefinition: {
@@ -35,9 +37,10 @@ const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", function () {
   console.log("db connected!");
+  app.emit("ready");
 });
 
-app.use(express.json());
+app.use(express.static("public"));
 app.use(cors());
 app.use("/", routesUrls);
 
@@ -45,6 +48,8 @@ app.use("/", (req, res, next) => {
   res.end("Home page");
 });
 
-app.listen(PORT, () => {
-  console.log(`Server listening on ${PORT}`);
+app.on("ready", function () {
+  app.listen(PORT, () => {
+    console.log(`Server listening on ${PORT}`);
+  });
 });
