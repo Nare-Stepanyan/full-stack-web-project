@@ -37,6 +37,7 @@ const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", function () {
   console.log("db connected!");
+  app.emit("ready");
 });
 
 app.use(express.static("public"));
@@ -47,6 +48,8 @@ app.use("/", (req, res, next) => {
   res.end("Home page");
 });
 
-app.listen(PORT, () => {
-  console.log(`Server listening on ${PORT}`);
+app.on("ready", function () {
+  app.listen(PORT, () => {
+    console.log(`Server listening on ${PORT}`);
+  });
 });
